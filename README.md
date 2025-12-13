@@ -1,47 +1,41 @@
-# Python Docs & Notes <!-- omit from toc -->
+# PHP Docs & Notes <!-- omit from toc -->
 
-This document is a reference guide for Python programming. It is a bit more than a simple cheat sheet, but it is not a learning book, you need to have some knowledge and experience with Python programming to understand these notes.
+This document is a reference guide for PHP programming. It is a bit more than a simple cheat sheet, but it is not a learning book, you need to have some knowledge and experience with PHP programming to understand these notes.
 
 
 ## Table of contents <!-- omit from toc -->
 
 - [Install](#install)
+  - [CLI vs Web Server](#cli-vs-web-server)
   - [Check](#check)
   - [Linux](#linux)
   - [macOS](#macos)
   - [Windows](#windows)
 - [Shebang line](#shebang-line)
 - [Syntax](#syntax)
-- [Variables, immutability and mutability](#variables-immutability-and-mutability)
+- [Variables and constants](#variables-and-constants)
+  - [Introduction](#introduction)
+  - [Data types](#data-types)
+  - [Passing by value or reference](#passing-by-value-or-reference)
 - [Operators](#operators)
-  - [Overview](#overview)
-  - [Division](#division)
-  - [Chaining](#chaining)
-  - [Membership](#membership)
-  - [Unpacking/packing](#unpackingpacking)
-  - [Slicing](#slicing)
-  - [For mutable types `a += b` is not the same as `a = a + b`](#for-mutable-types-a--b-is-not-the-same-as-a--a--b)
-- [len, min, max](#len-min-max)
-- [print, input](#print-input)
-- [Basic types](#basic-types)
-  - [NoneType](#nonetype)
-  - [Integers](#integers)
-  - [Floating-point numbers](#floating-point-numbers)
-  - [Complex numbers](#complex-numbers)
-  - [Booleans](#booleans)
-  - [Strings](#strings)
-    - [Defining](#defining)
-    - [Formatting](#formatting)
-    - [Manipulation](#manipulation)
-    - [Regular expression](#regular-expression)
-  - [Bytes and bytearray](#bytes-and-bytearray)
-- [Collections](#collections)
-  - [List (ordered sequence of objects)](#list-ordered-sequence-of-objects)
-  - [Tuple (immutable list)](#tuple-immutable-list)
-  - [Set (unordered collection of unique items)](#set-unordered-collection-of-unique-items)
-  - [Dictionary (collection of key-value pairs)](#dictionary-collection-of-key-value-pairs)
-- [Help and docstring](#help-and-docstring)
-- [Type hints](#type-hints)
+- [echo, format, input](#echo-format-input)
+  - [echo](#echo)
+  - [Format string](#format-string)
+  - [Read input line](#read-input-line)
+- [Strings](#strings)
+  - [Single vs Double quotes](#single-vs-double-quotes)
+  - [Common functions](#common-functions)
+  - [Regular expression](#regular-expression)
+- [Arrays](#arrays)
+  - [Onedimensional](#onedimensional)
+  - [Multidimensional](#multidimensional)
+  - [Common functions](#common-functions-1)
+  - [Add element](#add-element)
+  - [Remove element](#remove-element)
+  - [Case-sensitive search](#case-sensitive-search)
+  - [In-place sort](#in-place-sort)
+  - [Slice](#slice)
+  - [Merge](#merge)
 - [Conditions](#conditions)
   - [Truthy and Falsy](#truthy-and-falsy)
   - [if](#if)
@@ -90,22 +84,16 @@ This document is a reference guide for Python programming. It is a bit more than
 
 ## Install
 
+### CLI vs Web Server
+
+PHP can be run through a web server or from the command line. To run it through a web server on your local machine install a LAMP (Linux Apache MySQL PHP), MAMP (Mac Apache MySQL PHP) or a WAMP (Windows Apache MySQL PHP). To use it as command line interpreter follow the next sections.
+
 ### Check
 
-To see whether Python is already installed, in your terminal run:
+To see whether PHP is already installed, in your terminal run:
 
 ```
-python3 --version  # on Linux and macOS
-py --version       # on Windows with py-launcher
-python --version   # on Windows
-```
-
-To verify that your script is running with the wanted version:
-
-```py
-import sys
-print(sys.version)
-print(sys.executable)
+php -v
 ```
 
 ### Linux
@@ -113,7 +101,7 @@ print(sys.executable)
 To install on Debian/Ubuntu:
 
 ```
-sudo apt install python3
+sudo apt install php-cli
 ```
 
 ### macOS
@@ -121,325 +109,135 @@ sudo apt install python3
 To install using [Homebrew](https://brew.sh/):
 
 ```
-brew install python
+brew install php
 ```
-
-Close and reopen your terminal so that it finds the new version.
 
 ### Windows
 
-For Windows [download](https://www.python.org/downloads/) the installer and run it. If you only have a single Python installation you should be done and you can skip the remaining of this section.
-
-For Windows the official Python installer provides the `py.exe` launcher which can be used to choose the wanted Python version.
-
-To list the installed versions (**\*** indicates the active version):
-
-```
-py --list
-py --list-paths
-```
-
-To use a specific version:
-
-```
-py -<version> [python-args] [script]
-```
-
-- To set a default version add an environment variable like `PY_PYTHON=3.12`
-
-If you also have **non py-launcher aware** installations in your `PATH` (use `where python` or `where pip` to check that), then you may have problems using the correct `pip`. To execute the `pip` corresponding to the py-launcher:
-
-```
-py -<version> -m pip --version
-```
+For Windows [download](https://windows.php.net/download/) the Non-Thread-Safe (NTS)package and unzip it to like `C:\php`. Now add the chosen folder to your `PATH`. Copy `php.ini-development` to `php.ini`.
 
 
 ## Shebang line
 
-Under Linux/macOS to be able to execute a Python script without invoking it through `python3`, make it executable and add a shebang line at the top of the file:
+Under Linux/macOS to be able to execute a PHP script without invoking it through `php`, make it executable and add a shebang line at the top of the file:
 
-```py
-#!/usr/bin/env python3
+```bash
+#!/usr/bin/env php
 ```
 
 
 ## Syntax
 
-Python is **case-sensitive**. Comments start at `#` and end with the line, there are no multi-line comments. But when several lines of code have to be comment out for testing, it's more practical to make them an unassigned [triple-quoted string literal](#strings) by surrounding them with **triple-quotes**. Python programmers usually use **snake case** (lowercase with words separated by underscores). Semicolons can be used to separate statements on the same line, but are not required to terminate statements.
+PHP is **case-sensitive**. A PHP block starts at `<?php` and ends with `?>` or at the end of the file. Comments start at `#` or `//` and end with the line or with the current block of PHP code, whichever comes first. Multi-line comments start with `/*` and end at the first `*/` encountered. 
 
-**Code blocks are always preceded by a colon**. A code block typically begins on a new line, with all statements having the same indentation amount. Note that the amount of spaces (or tabs) used to indent code blocks is up to the user, as long as it is consistent throughout the script. Most style guides recommend **indenting** code blocks by **four spaces** rather than using a tab (never mix tabs with spaces). Alternatively, a code block can be placed immediately after the colon on the same line, with semicolons separating the statements.
+PHP programmers use both **snake_case** and **camelCase**.
 
-When a single line contains `(` or `[` or `{` or `'''` or `"""`, it can be **split after these symbols** to extend across multiple lines. However, if a single line does not contain those symbols, it's necessary to add final **backslashes** to divide into multiple lines.
+Statements are terminated by a **semicolon**.
 
-Python uses **zero based indexing**; negative indexing is allowed, `-1` is the index of the last element, `-2` the second-to-last and so on.
+Most PHP style guides recommend **indenting** by **four spaces** rather than using a tab.
 
-
-## Variables, immutability and mutability
-
-In Python all variables are objects, and the variable names are **labels** assigned to objects. Variables names are composed of alphanumeric characters or underscores and are not permitted to commence with a number. Assigning variables is just like giving a new nickname, in `foo = bar = baz = 3` the variable names are just labels for the same object.
-
-In Python assignments are statements, use the **assignment expression** or **Walrus** operator `:=` to have the right side value returned. This construct is also called a named expression.
-
-By convention the `_` variable is used as a placeholder/throwaway variable in for-loops or when unpacking, and in the interactive shell it stores the last expression value.
-
-The variable types are **dynamic** and determined at runtime. The objects are subdivide into two categories:
-
-1. **Immutable** are objects whose internal state/values can't be changed or altered:
-
-   ```py
-   NoneType, int, float, bool, str, tuple, complex, bytes
-   ```
-
-2. **Mutable** are objects whose internal state/values can be changed after creation:
-
-   ```py
-   list, set, dict, bytearray
-   ```
-
-   - Shallow copies (with `.copy` or [slicing](#slicing)) only make a copy of the first level objects, sublists remain referenced. To copy everything use the `copy` module with its `copy.deepcopy()` function.
+PHP uses **zero based indexing**.
 
 
-To check whether two variable names point to the same object us the **identity operators** `is` (not identity operator: `is not`). Get the object id with `id(obj)` and the object type with `type(obj)`.
+## Variables and constants
 
-In Python functions are using **pass-by-assignment**. When we call a function, each parameter becomes a new nickname to the given object:
+### Introduction
 
-1. If we pass-in immutable arguments, then we cannot modify the arguments themselves, the resulting behavior is **pass-by-value**.
+Variables are prefixed by a `$`, both when assigned and used. Constants are declared at compile time with `const NAME = value` or at run time through `define('NAME', value)`.
 
-2. If we pass-in mutable arguments, then we can change them, the resulting behavior is **pass-by-reference**.
+A variable is global if it is used at the top level (outside any function definition) or if it is declared inside a function with the `global` keyword. A function must use the `global` keyword to access a global variable.
+
+### Data types
+
+```php
+null, bool, int, float, string, array, object, resource
+```
+
+There is only one value of type `null`, and that is the case-insensitive constant `null`. Undefined, and `unset()` variables will resolve to the value `null`. The data values for `bool` are `true` and `false`.
+
+The `int` is always signed, and its size depends from the platform (32-bit vs 64-bit); there are the `PHP_INT_SIZE`, `PHP_INT_MAX` and `PHP_INT_MIN` constants. In PHP there is no difference between `float` and `double`.
+
+We can use C-style casts to convert between data types like for example `(int)3.14`.
+
+Hint: use `var_dump()` or `print_r()` to view the variable details.
+
+### Passing by value or reference
+
+- *For non-object data types including arrays*: function arguments are **passed-by-value**. To **pass-by-reference** prepend an `&` to the argument name in the function definition. Variable assignments involve **value copying**. Use the reference operator to **copy-by-reference**, for example `$var2 = &$var1`. Functions do also **return-by-value**. To have a function **return-by-reference**, prepend the function declaration name with an `&` and when assigning the return value to a variable, you probably want an assignment-by-reference with another `&`.
+
+- *For object data types*: an object variable doesn't contain the object itself as value. It only contains an object identifier which follows the rules for non-object data-types; from that it follows that **objects are passed-by-references**.
 
 
 ## Operators
 
-### Overview
-
 ```
-Assign:                          = += -= *= /= **= %= //=
-Inc/dec:                         x += 1  x -= 1
-Math:                            + - * / %
-Exponentiation:                  **
-Truncation division
-(truncates to neg. infinity):    //
-Quotient and remainder (→tuple): divmod(num1, num2)
-Comparison:                      < <= > >= == !=
-Boolean:                         and or not
-Bitwise:                         ~ | & ^
-Shift:                           << >>
-```
-
-### Division
-
-The `/` operator treats the operands as floats (even if they are int) and performs a floating-point division.
-
-### Chaining
-
-```py
-1 < a < 3
-```
-
-### Membership
-
-```py
-abc = ["a","b","c","d","e"]
-"a" in abc       # True
-"a" not in abc   # False
-```
-
-### Unpacking/packing
-
-Unpacking is the operation of extracting data from a structured type into distinct variables. The opposite operation is termed packing. In some programming languages instead of unpacking we speak of destructuring. Unpacking happens automatically when **assigning an iterable to a tuple/list of variables**.
-
-The most common application of unpacking is to multiple assign variables on one line: `x, y = 5, 11`. The expressions on the right side of the equal sign are all evaluated before any of the assignments take place: `a, b = b, a`. The assignment are then applied to the left side of the equal sign in left-to-right order: `i, x[i] = 1, 2`.
-
-There are situations where we need to explicitly trigger unpacking/packing:
-
-- The `*` operator in front of an iterable performs unpacking when reading the iterable and packing when writing into it.
-- The `**` operator in front of a dictionary performs unpacking when reading the dictionary and packing when writing into it.
-
-The following example illustrates where unpacking and packing happen:
-
-```py
-list1 = [1, 2, 3]
-c = 4
-d = 5
-[a, b, *list2] = [*list1, c, d]
-```
-
-1. The `[*list1, c, d]` list is created from the unpacked `list1`, `c` and `d`.
-2. The assignment operation unpacks the right-hand side list into elements.
-3. The first two elements get assigned to `a` and `b`.
-4. The remaining elements are packed into `list2`.
-
-### Slicing
-
-Slicing does return a new sliced object (start and end_exclusive can be negative): 
-
-```py
-s[start:end_exclusive]      # extract from start till end_exclusive
-s[start:]                   # extract from start till last
-s[:end_exclusive]           # extract from begin till end_exclusive
-s[start:end_exclusive:step] # extract from start till end_exclusive
-                            # with increments of step
-```
-
-### For mutable types `a += b` is not the same as `a = a + b`
-
-When the `+=` operator is used on an object which has `__iadd__` (in-place addition) defined, the object is modified in place. Otherwise it will instead use `__add__` and return a new object. Mutable types have `__iadd__`, whereas immutable ones only have `__add__`.
-
-
-## len, min, max
-
-```py
-# It calls obj's __len__() method
-len(obj)
-```
-
-```py
-# Order numerically/alphabetically
-smallest = min(iterable)
-
-# Order by len()
-shortest_word = min(iterable, key=len)
-```
-
-```py
-# Order numerically/alphabetically
-largest = max(iterable)
-
-# Order by len()
-longest_word = max(iterable, key=len)
+Assign:           = += -= *= /= **= %=
+Pre inc/dec:      ++$x --$x
+Post inc/dec:     $x++ $x--
+Math:             + - * / %
+Exponentiation:   **
+Comparison:       < <= > >= == != === !==
+Boolean:          && || !
+Bitwise:          ~ | & ^
+Shift:            << >>
+String concat:    . .=
 ```
 
 
-## print, input
+## echo, format, input
 
-```py
-print("No newline yet/", end="")
-print("line", "continuation", sep="-")
+### echo
+
+`echo` is not a function but a language construct, it outputs one or more expressions separated by commas; no newlines or spaces are printed. 
+
+```php
+echo "Hello", "World!", "\n";
+echo "Hello" . "World!" . "\n";
 ```
 
-```py
-n = input("Enter a number: ") # returns a string
-print("Your number plus 1 is", int(n) + 1)
+### Format string
+
+```php
+$num = 3;
+$location = 'tree';
+$format = "There are %d monkeys in the %s\n";
+printf($format, $num, $location);
+echo sprintf($format, $num, $location);
+```
+
+### Read input line
+
+```php
+$n = readline('Enter a number: ');
+printf('Your number+1 is %d', (int)$n+1);
 ```
 
 
-## Basic types
+## Strings
 
-### NoneType
+### Single vs Double quotes
 
-```py
-x = None
-x is None     # True
-x is not None # False
+**Single-quoted** strings are almost not interpreted, except for `'\\'` and `'\''`. **Double-quoted** strings support escape sequences like `"\n"` and many more, and variables are evaluated. Delimit a variable name with curly braces, for example `"{$foo}bar"`.
+
+### Common functions
+
+```php
+$s = strtoupper($s);
+$s = strtolower($s);
+$len = strlen($s);
+$s = trim($s);  // trim whitespaces
+$s = ltrim($s); // trim left whitespaces
+$s = rtrim($s); // trim right whitespaces
+$pos = strpos($s, $substr);  // false if not found
+$pos = strrpos($s, $substr); // false if not found
+$s = substr($s, $start, $len);
+$arr = explode($sep, $s);    // $sep is char or string
+$s = str_replace($search, $replace, $s); // replace all
 ```
 
-### Integers
+### Regular expression
 
-```py
-cost = 1_000  # thousands separator
-converted = int("12")
-from_hex = int("3f", 16) # base 16
-truncate = int(12.92)
-absolute_value = abs(-1)
-```
-
-### Floating-point numbers
-
-```py
-absolute_value = abs(-1.23)
-converted = float("12.3")
-
-# The second argument is the number
-# of decimals which defaults to 0
-rounded = round(3.1415, 2)
-```
-
-### Complex numbers
-
-```py
-# We always need a number before j
-num = 12 + 1j
-```
-
-### Booleans
-
-```py
-is_red = True
-is_blue = False
-converted = bool(1) # True
-converted = bool(0) # False
-```
-
-```py
-# - True if all are True
-# - True for an empty iterable
-all(iterable)
-```
-
-```py
-# - True if at least one is True
-# - False for an empty iterable
-any(iterable)
-```
-
-### Strings
-
-#### Defining
-
-Strings can either be single-quoted or double-quoted and can contain backslash escapes like `\\`  `\'`  `\"`  `\r` `\n` `\t`. Use `\ooo` for the octal character `ooo` and `\xhh` for the hex character `hh`. Unicode characters are represented with `\uxxxx` or `\Uxxxxxxxx`. Strings prefixed with `r` or `R` are raw strings which treat backslashes as literal characters. Strings prefixed by `f` or `F` are f-strings which allow embedding expressions inside string literals. It's also possible to combine the prefixes to get raw f-strings.
-
-To have the newlines in the string, surround in **triple-quotes**.
-
-```py
-converted = str(12)
-repetition = 4 * "string"
-concat1 = "str1" + "str2"
-concat2 = "str1" "str2"
-concat3 = "str1\
-str2"
-multiline = """line1
-line2"""
-```
-
-#### Formatting
-
-```py
-val1, num1, num2 = "one", 123, 59.058
-width, precision = 6, 1
-print(f"_{val1:5}_")     # left-aligned
-print(f"_{val1:>5}_")    # do right-align
-print(f"_{val1:^5}_")    # do center-align
-print(f"_{num1:5d}_")    # right-aligned
-print(f"_{num1:<5d}_")   # do left-align
-print(f"{num1:05d}")     # zero-fill
-print(f"0x{num1:04x}")   # zero-fill hex
-print(f"_{num2:7.2f}_")  # right-aligned
-print(f"_{num2:<7.2f}_") # do left-align
-print(f"_{num2:{width}.{precision}f}_")
-print(f"_{num1+num2:.0f}_")
-
-# Double the braces to escape them
-print(f"{{foo}}")
-```
-
-#### Manipulation
-
-```py
-text.upper()
-text.lower()
-text.count(sub)
-text.strip()    # trim whitespaces
-text.lstrip()   # trim left whitespaces
-text.rstrip()   # trim right whitespaces
-sub in text     # return True or False
-text.index(sub) # raises ValueError if not found
-text.find(sub)  # return index, -1 if not found
-text.rfind(sub) # return index of last one
-"1,2,3".split(",")     # return a list
-text.replace(old, new) # replace all
-```
-
-#### Regular expression
+TODO: convert from Python to PHP!!!
 
 Always use raw string patterns to avoid interpreting backslashes.
 
@@ -455,216 +253,115 @@ res = re.sub(r'pattern', r'replacement', text) # replace all
 The regex (regular expression) functions have a `flags` parameter to alter the expression's behavior. The most common flags are `re.IGNORECASE`, `re.MULTILINE`, `re.DOTALL` and `re.ASCII` which can be combined using the bitwise OR (the `|` operator). By default `\w` matches also unicode characters, with `re.ASCII` only ascii characters are matched.
 
 
-### Bytes and bytearray
+## Arrays
 
-```py
-# String to Bytes
-s = "Hello, World!"
-print(s.encode()) # utf8 bytes type
-print(bytearray(s, 'utf-8'))
+Arrays in PHP are ordered lists, where each value is associated to a unique numeric/string key. When initializing an array with duplicated keys, the later ones win.
 
-# Bytes to String
-utf8 = b'\x48\x65\x6c\x6c\x6f' # b'Hello'
-utf8_arr = bytearray(utf8)
-print(utf8.decode())
-utf8_arr[0] = 104
-print(str(utf8_arr, 'utf-8'))
+### Onedimensional
+
+```php
+$arr = array(1, 2, 3);
+$arr = [1, 2, 3]; // short syntax
+$arr = [0 => 'val1', 1 => 'val2'];
+$arr = ['key1' => 'val1', 'key2' => 'val2'];
+echo $arr['key1'];
 ```
 
+### Multidimensional
 
-## Collections
+Multidimensional arrays are simply arrays which have other arrays as elements.
 
-### List (ordered sequence of objects)
-
-```py
-cities = ["Vienna", "London", "Paris", 
-          "Berlin", "Zurich", "Hamburg"]
-
-cities[-1] = "New York" # replace last one
-cities.insert(i, "Bern")
-cities.pop(i)           # return & remove ith element
-cities.pop(-1)          # pop last one, same as pop()
-cities.append("Locarno")
-print(cities + other)   # combine lists
-cities.extend(other)    # append other list
-cities.remove("Berlin") # remove first occurrence
-cities.clear()          # clear all
-cities.index("Berlin")  # find position of element
-cities.index("Berlin", start)
-cities.index("Berlin", start, end_exclusive)
-cities.reverse()        # reverse in-place
-list(reversed(cities))  # return a new reversed list
-cities.sort()           # sort in-place
-cities.sort(reverse=True)
-sorted(cities)          # return a new sorted list
-list(zip(list1, list2)) # return a new tuple list
-
-# Unpack/pack
-a, *mid, b = cities     # unpack + pack to mid
-cities = [a, *mid, b]   # unpack mid to elements
-
-# Constructor
-l1 = list(iterable)
+```php
+$arr = [
+    'arr1' => [1, 2, 3],
+    'arr2' => [4, 5, 6]
+];
+echo $arr['arr1'][0];
 ```
 
-- It's not possible to append elements by assigning past the last index.
+### Common functions
 
-**Comprehensions**
-
-```py
-# newlist = [expression for item in iterable if condition == True]
-even_numbers = [x for x in range(10) if x % 2 == 0]
+```php
+$c = count($arr);
+$vals = array_values($arr); // re-index
+$keys = array_keys($arr);
+$arr = array_combine($keys, $vals);
+$arr = array_unique($arr);  // remove duplicates
 ```
 
-### Tuple (immutable list)
+### Add element
 
-Python defines a tuple with commas, the parentheses can usually be left out (see the exceptions below):
+```php
+// Append
+// Note: keys remain untouched
+$arr[] = $val;
+$arr[$key] = $val;
 
-```py
-t = ("tuples", "are", "immutable", "and", "are", "fast")
-t2 = "hello", 12
-one = "solo",  # without the comma you get a string
+// Prepend value
+// Note: numeric keys are reset to start at 0
+array_unshift($arr, $val);
 
-x = t[0]
-t.count("are") # return the count of "are"
-t.index("are")
-t3 = t + t2    # combine tuples
-
-# Unpack/pack
-a, *mid, b = t # unpack + pack to mid
-t = a, *mid, b # unpack mid to elements
-
-# Constructor
-t4 = tuple(iterable)
+// Prepend key-value
+$arr = [$key => $val] + $arr;
 ```
 
-- Use parentheses to avoid ambiguity with precedences.
-- Parentheses are required when passing a tuple as a function argument.
-- Parentheses are necessary to define the empty tuple: `()`
+### Remove element
 
-### Set (unordered collection of unique items)
+```php
+// Remove given element
+// Note: keys remain untouched
+unset($arr[2]);
+unset($arr['key1']);
 
-```py
-x = {"a","b","c","d","e"}
-y = {"b","c"}
+// Remove last element
+// Note: keys remain untouched
+$lastval = array_pop($arr);
 
-x.add("a")        # does nothing
-y.add("a")
-y.remove("a")     # raises error if not present
-y.discard("a")    # remove if present
-x.difference(y)   # return difference as new set
-x.union(y)        # return union as new set
-x.intersection(y) # return intersection as new set
-
-# Constructor
-z = set(iterable)
+// Remove first element
+// Note: numeric keys are reset to start at 0
+$firstval = array_shift($arr);
 ```
 
-**Comprehensions**
+### Case-sensitive search
 
-```py
-# newset = {expression for item in iterable if condition == True}
-letters = {x for x in 'Hello World'} # no duplicates
+```php
+$b = in_array($val, $arr);
+$key = array_search($val, $arr); // false if not found
+$b = array_key_exists($key, $arr);
 ```
 
-### Dictionary (collection of key-value pairs)
+### In-place sort
 
-```py
-person = {"first_name" : "John",
-          "last_name" : "Doe",
-          "age" : 33}
-
-x = person["first_name"]              # read
-person["first_name"] = "Jimmy"        # change
-person["email"] = "jim.doe@gmail.com" # add
-y = person.pop("email")               # return & remove
-del person["age"]                     # remove
-
-# Unpack and merge
-# (values with the same key are overwritten)
-person1 = {**person,
-           "first_name" : "Jim",
-           "country" : "USA"}
-
-# Constructor
-d1 = dict(a=1, b=2, c=3)              # named args
-d2 = dict([('a',1),('b',2),('c',3)])  # iterable
-d3 = dict(iterable, d=4, e=5)         # named args at end
+```php
+sort($arr);   // resets keys to 0..count($arr)-1
+rsort($arr);  // reverse sort()
+asort($arr);  // maintains key-value association
+arsort($arr); // reverse asort()
+ksort($arr);  // sort by key
+krsort($arr); // reverse ksort()
 ```
 
-- Since Python 3.7 dictionaries are ordered.
-- Duplicate keys are not supported.
-- Keys can be any immutable data type.
-- Values can be any data type.
-- Python doesn't support dot notation to access a value like `dict.key`, you must use `dict[key]`
+### Slice
 
-**Comprehensions**
-
-```py
-# newdict = {k: v for k in iterable if condition == True}
-power2 = {k: 2**k for k in range(4)}
-
-# newdict = {k: v for k, v in iterable if condition == True}
-mydict = {'a': 0, 'b': 1, 'c': 2, 'd': 3}
-power2 = {k: 2**v for k, v in mydict.items()}
-
-# newlist = [(k, v) for k, v in iterable if condition == True]
-letter_pairs = {'a': 'A', 'b': 'B', 'c': 'C'}
-tuple_list = [(k, v) for k, v in letter_pairs.items()]
+```php
+// $preserve_keys defaults to false, that will reorder 
+// and reset integer keys (not string keys)
+$arr = array_slice($arr, $offset, $len, $preserve_keys);
 ```
 
+### Merge
 
-## Help and docstring
+```php
+// Left-side key wins when duplicated
+$arr = $a + $b;
 
-Help in Python is always available right in the interpreter:
-
-- `help(obj)` describes an object, without an argument the interactive help starts.
-- `dir(obj)` shows all the object's methods, without an argument it returns the list of names in the current local scope.
-
-If the first statement in a function, class or module is an unassigned string literal, then it's called a **docstring**. By convention [multiline strings](#strings) are used. The docstring becomes the `__doc__` special attribute of that object which can be printed with `help(obj)`:
-
-```py
-def sum_nums(a, b):
-    """Sum two numbers.
-
-    Args:
-        a: first number.
-        b: second number.
-
-    Returns:
-        The sum of the two numbers.
-    """
-    return a + b
-
-help(sum_nums) # uses: sum_nums.__doc__
-```
-
-
-## Type hints
-
-Python does not enforce variable type and function annotations. They can be used by third party tools such as type checkers, IDEs and linters.
-
-```py
-# Use the name of the type in the annotation
-x: int = 1
-x: float = 1.0
-x: bool = True
-x: str = "test"
-
-# The item type is in brackets
-x: list[int] = [1, 2, 4]
-x: set[int] = {6, 7}
-x: dict[str, float] = {"field1": 1.0, "field2": 3.0}
-x: tuple[int, str, float] = (3, "yes", 7.5)
-
-# Annotate a function definition like
-def stringify(num: int) -> str:
-    return str(num)
-
-# - If a function does not return a value, use None as the return type
-# - Default value for an argument goes after the type annotation
-def show(value: str, excitement: int = 10) -> None:
-    print(value + "!" * excitement)
+// 1. For non-numeric keys the later ones win
+// 2. For numeric keys the resulting array 
+//    gets the keys reset and starting at 0
+$arr = array_merge($a, $b);
+$arr = [...$a, ...$b]; // spread operator
+$arr = [...$a, 5, ...$b];
+$arr = ['key' => 'val', ...$a, ...$b];
 ```
 
 
