@@ -153,13 +153,23 @@ A variable is global if it is used at the top level (outside any function defini
 null, bool, int, float, string, array, object, resource
 ```
 
-There is only one value of type `null`, and that is the case-insensitive constant `null`. Undefined, and `unset()` variables will resolve to the value `null`. The data values for `bool` are `true` and `false`.
+There is only one value of type `null`, and that is the case-insensitive constant `null`. Undefined variables and variables passed to `unset()`, will have a value of `null`.
 
-The `int` is always signed, and its size depends from the platform (32-bit vs 64-bit); there are the `PHP_INT_SIZE`, `PHP_INT_MAX` and `PHP_INT_MIN` constants. In PHP there is no difference between `float` and `double`.
+The `int` data type is always signed, and its size depends from the platform (32-bit vs 64-bit), see the `PHP_INT_SIZE`, `PHP_INT_MAX` and `PHP_INT_MIN` constants. In PHP there is no difference between `float` and `double`, in fact `double` is an alias of `float`. There are the `PHP_FLOAT_MIN` and `PHP_FLOAT_MAX` constants.
 
-We can use C-style casts to convert between data types like for example `(int)3.14`.
+The `resource` data type holds a reference to an external resource, such as a database connection or a file handler.
 
-Hint: use `var_dump()` or `print_r()` to view the variable details.
+```php
+$my_null = null;  // null
+$my_bool = true;  // true/false
+$num = 10;        // int
+$num = 012;       // octal
+$num = 0x0A;      // hexadecimal
+$num = 0b1010;    // binary
+$num = 3.1415;    // float
+$num = (int)$num; // cast to int
+```
+- Use `var_dump()` or `print_r()` to view the variable details.
 
 ### Passing by value or reference
 
