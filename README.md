@@ -245,22 +245,29 @@ $arr = explode($sep, $s);    // $sep is char or string
 $s = str_replace($search, $replace, $s); // replace all
 ```
 
-### Regular expression
+### Regular expression  
 
-TODO: convert from Python to PHP!!!
+```php
+// The PCRE regex
+$pattern = '/../ims'; // use single-quotes
 
-Always use raw string patterns to avoid interpreting backslashes.
+// Search $pattern, $matches is optional,
+// returns 1 on match, otherwise 0
+if (preg_match($pattern, $s, $matches))
+    print_r($matches[0]);
 
-```py
-import re
-m = re.search(r'pattern', text)   # return first as Match or None
-print(text[m.start():m.end()])    # m.end() is exclusive 
-l1 = re.findall(r'pattern', text) # return all found as a list
-l2 = re.split(r'[^a-zA-Z]', text) # return splits as a list
-res = re.sub(r'pattern', r'replacement', text) # replace all
+// Split at $pattern delimiter
+$arr = preg_split($pattern, $s);
+
+// Replace all $pattern matches
+$s = preg_replace($pattern, $replacement, $s);
 ```
-
-The regex (regular expression) functions have a `flags` parameter to alter the expression's behavior. The most common flags are `re.IGNORECASE`, `re.MULTILINE`, `re.DOTALL` and `re.ASCII` which can be combined using the bitwise OR (the `|` operator). By default `\w` matches also unicode characters, with `re.ASCII` only ascii characters are matched.
+- `$matches[0]` is the match.
+- `$matches[1]..$matches[count($matches)-1]` are the grouping matches.
+- When replacing `preg_match` with `preg_match_all`, the return value is the number of matches and `$matches` is an array of arrays.
+- The `i` flag means to ignore the case.
+- The `m` flag specifies a multiline match. If it is used, `^` and `$` change from matching at only the start or end of the entire string to the start or end of any line within the string. 
+- The `s` flag makes the dot also match line breaks.
 
 
 ## Arrays
