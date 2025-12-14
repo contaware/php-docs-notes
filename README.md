@@ -241,8 +241,9 @@ $s = rtrim($s); // trim right whitespaces
 $pos = strpos($s, $substr);  // false if not found
 $pos = strrpos($s, $substr); // false if not found
 $s = substr($s, $start, $len);
-$arr = explode($sep, $s);    // $sep is char or string
-$s = str_replace($search, $replace, $s); // replace all
+$arr = explode($sep, $s);    // $sep is a string
+$s = implode($sep, $arr);    // $sep is a string
+$s = str_replace($search, $repl, $s); // replace all
 ```
 
 ### Regular expression  
