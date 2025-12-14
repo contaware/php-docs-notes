@@ -246,7 +246,7 @@ $s = implode($sep, $arr);    // $sep is a string
 $s = str_replace($search, $repl, $s); // replace all
 ```
 
-### Regular expression  
+### Regular expression
 
 ```php
 // The PCRE regex
@@ -273,14 +273,19 @@ $s = preg_replace($pattern, $replacement, $s);
 
 ## Arrays
 
-Arrays in PHP are ordered lists, where each value is associated to a unique numeric/string key. When initializing an array with duplicated keys, the later ones win.
+Arrays in PHP are ordered maps, where each value is associated to a unique numeric/string key. Numeric keys must be of type `int` and string keys are of type `string`. Note that string keys having a valid integer representation are converted to numeric keys. When initializing an array with duplicated keys, the later values win.
 
 ### Onedimensional
 
 ```php
+// Numeric keys
 $arr = array(1, 2, 3);
 $arr = [1, 2, 3]; // short syntax
+$arr = ['val1', 'val2'];
 $arr = [0 => 'val1', 1 => 'val2'];
+echo $arr[0];
+
+// String keys
 $arr = ['key1' => 'val1', 'key2' => 'val2'];
 echo $arr['key1'];
 ```
