@@ -38,9 +38,10 @@ This document is a reference guide for PHP programming. It is a bit more than a 
   - [Merge](#merge)
 - [Conditions](#conditions)
   - [Truthy and Falsy](#truthy-and-falsy)
+  - [Loose and Strict comparison](#loose-and-strict-comparison)
   - [if](#if)
-  - [Conditional expression](#conditional-expression)
-  - [match-case](#match-case)
+  - [Ternary operator](#ternary-operator)
+  - [switch-case](#switch-case)
   - [try-except](#try-except)
 - [Loops](#loops)
   - [while](#while)
@@ -392,47 +393,59 @@ $arr = ['key' => 'val', ...$a, ...$b];
 
 ### Truthy and Falsy
 
-The terms **truthy** and **falsy** refer to values that are not booleans but, when evaluated, assume the values of `True` and `False`.
+The terms **truthy** and **falsy** refer to values that are not of type `bool` but, when interpreted, assume the values of `true` and `false`.
 
-- **Falsy**: `None`, **zero** of any numeric type, **empty** strings, **empty** sequences or **empty** collections.
+- **Falsy**: `null`, **zero** of any numeric type, **empty** arrays, **empty** strings and the string `'0'`.
 
-- **Truthy**: all the others.
+- **Truthy**: all the others, including `NAN`.
+
+### Loose and Strict comparison
+
+- [Loose comparison](https://www.php.net/manual/types.comparisons.php#types.comparisions-loose): only the values are compared, if the variables have a different data type, then a type conversion happens before the comparison. The operators are `< <= > >= == !=`.
+
+- [Strict comparison](https://www.php.net/manual/types.comparisons.php#type.comparisons-strict): both data type and value must match. The operators are `=== !==`.
  
 ### if
 
-```py
-if condition1:
-    print("One or more statements")
-elif condition2:
-    pass # use pass statement to do nothing
-else:
-    print("One or more statements")
+```php
+if (condition1) {
+    // condition1 is true
+} elseif (condition2) {
+    // condition1 is false
+    // and
+    // condition2 is true
+} else {
+    // both are false
+}
 ```
 
-### Conditional expression
+### Ternary operator
 
-If `condition` is `True`, the left-side of `if` is evaluated and its value is returned; otherwise, the right-side of `else` is evaluated and its value is returned.
+If `condition` is `true`, `$res` is `val1`, otherwise it is `val2`:
 
-```py
-# Return value assigned
-ret = x if condition else y
-print(ret)
-
-# Return value ignored 
-print("OK") if condition else print("Not OK")
+```php
+$res = condition ? val1 : val2;
 ```
 
-### match-case
+### switch-case
 
-```py
-match var:
-    case pattern1:
-        print("One or more statements")
-    case pattern2a | pattern2b:  # or
-        print("One or more statements")
-    case _:  # default
-        print("One or more statements")
+As opposed to the C/C++ language, in PHP the case values are not limited to `int`, they can also be of type `string` or `float`:
+
+```php
+switch ($n) {
+case val1:
+    // $n == val1
+    break;
+case val2:
+    // $n == val2
+    break;
+default:
+    // $n is neither 
+    // of the above
+}
 ```
+
+Note: `switch` does a loose comparison (it uses `==`).
 
 ### try-except
 
