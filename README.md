@@ -154,7 +154,7 @@ A variable is global if it is used at the top level (outside any function defini
 null, bool, int, float, string, array, object, resource
 ```
 
-There is only one value of type `null`, and that is the case-insensitive constant `null`. Undefined variables and variables passed to `unset()`, will have a value of `null`.
+There is only one value of type `null`, and that is the case-insensitive constant `null`. Arrays accessed with an undefined key, undefined variables and variables passed to `unset()`, are all regarded as `null`, but testing them raises a warning. That warning can be avoided by using `isset()`, which checks whether a variable has been declared and is not `null`.
 
 The `int` data type is always signed, and its size depends from the platform (32-bit vs 64-bit), see the `PHP_INT_SIZE`, `PHP_INT_MAX` and `PHP_INT_MIN` constants. In PHP there is no difference between `float` and `double`, in fact `double` is an alias of `float`. There are the `PHP_FLOAT_MIN` and `PHP_FLOAT_MAX` constants.
 
