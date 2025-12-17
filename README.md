@@ -43,10 +43,12 @@ This document is a reference guide for PHP programming. It is a bit more than a 
   - [Ternary operator](#ternary-operator)
   - [switch-case](#switch-case)
   - [try-except](#try-except)
+    - [Introduction](#introduction-1)
+    - [Purpose of finally](#purpose-of-finally)
 - [Loops](#loops)
   - [while](#while)
   - [for](#for)
-  - [iter](#iter)
+  - [foreach](#foreach)
 - [Functions](#functions)
 - [Classes](#classes)
 - [Modules](#modules)
@@ -449,132 +451,75 @@ Note: `switch` does a loose comparison (it uses `==`).
 
 ### try-except
 
-```py
-try:
-    raise Exception("Bad")
-except ZeroDivisionError:
-    print("You are dividing by zero")
-except Exception as e:
-    print(e)
-else:
-    print("Runs if no exception")
-finally:
-    print("Runs always")
+#### Introduction ####
+
+When an exception is thrown, code following the statement will not be executed, and PHP will attempt to find the first matching `catch` block, this means that **catch order matters!**
+
+```php
+try {
+    throw new Error('Bad');
+} catch (Exception $e) {
+    echo "$e\n";
+} catch (Error $e) {
+    echo "$e\n";
+} finally {
+    echo "Runs always\n";
+}
 ```
+Hint: the classes `Exception` and `Error` both implement the `Throwable` interface. Catch `Throwable` to catch both of them.
+
+#### Purpose of finally ####
+
+The `finally` block is often used to do clean-up work because it always runs.
+
+The code in `finally` is also executed:
+
+1. When an exception isn't handled by any of our `catch` blocks.
+2. If another exception is thrown from within one of our `catch` blocks.
+
+For the above two cases, after the execution of the code in `finally` has terminated, the unhandled exception or the new exception are propagated to the higher level `catch` block.
 
 
 ## Loops
 
 ### while
 
-```py
-while condition:
-    print("One or more statements")
-else:
-    print("Completed without break being called")
+```php
+$i = 0;
+while ($i < 10) {
+    echo $i++;
+}
 
-i = 0
-while i < 10:
-    print(i)
-    i += 1
+$i = 0;
+do {
+    echo $i++;
+} while ($i < 10);
 ```
 
 - Use `break` to break out of the loop and `continue` to jump to the start.
 
 ### for
 
-We can loop over `str`, `list`, `tuple`, `set` and `dict`:
-
-```py
-for var in iterable:
-    print("One or more statements")
-else:
-    print("Completed without break being called")
-
-nums = [1, 2, 3, 4, 5]
-for i in nums:
-    print(i)
+```php
+for ($i = 0; $i < 10; $i += 1) {
+    echo $i;
+}
 ```
 
-- Use `break` to break out of the loop and `continue` to jump to the start.
+### foreach
 
-The **range type** represents an immutable iterable sequence of numbers which has a length and can be indexed/sliced:
+```php
+$arr = [1, 2, 3];
+foreach ($arr as $val) { 
+	echo $val;
+}
 
-```py
-range(count)                      # 0..(count - 1)
-range(start, end_exclusive)       # start..(end_exclusive - 1)
-range(start, end_exclusive, step) # range with step increments
-
-nums = [1, 2, 3, 4, 5]
-for i in range(len(nums)):
-    print(nums[i])
-```
-
-Loop through dictionaries:
-
-```py
-# Iterating over keys is the default
-for k in mydict:
-    print(k, '->', mydict[k])
-for k in mydict.keys():
-    print(k, '->', mydict[k])
-
-for v in mydict.values():
-    print(v)
-
-for k, v in mydict.items():
-    print(k, '->', v)
-```
-
-
-### iter
-
-An **iterator** object gets created when calling `iter()` on an iterable object (list, tuple, dict, set, str, range). The iterator has the `next()` method for iteration. Iterators are stateful, once an item is consumed it's gone. The `next()` method raises a `StopIteration` to signal the end of the iteration. An iterator that has been fully consumed is termed **exhausted**.
-
-Iterables are able to be iterated over and iterators are the agents that perform the iteration. All iterators are also iterables because calling `iter()` on an iterator will give itself back.
-
-```py
-animals = ["dog", "cat", "snake"]
-
-# That works because iterators are also iterables
-iter_animals = iter(animals)
-for item in iter_animals:
-    print(item)
-
-# That works if None is not in array
-iter_animals = iter(animals)
-while (item := next(iter_animals, None)) is not None:
-    print(item)
-
-# That's what a for-loop internally does
-iter_animals = iter(animals)
-while True:
-    try:
-        item = next(iter_animals)
-        print(item)
-    except StopIteration:
-        break
-```
-
-**Generator functions** have `yield` statement(s) and automatically return an iterator:
-
-```py
-def my_gen_func(x):
-    yield 1
-    yield 2
-    yield x * x
-
-iter_nums = my_gen_func(2)
-while (num := next(iter_nums, None)) is not None:
-    print(num)
-```
-
-**Generator expressions** are in parentheses and evaluate to an iterator:
-
-```py
-iter_range = (n for n in range(3, 5))
-while (num := next(iter_range, None)) is not None:
-    print(num)
+$arr = ["name" => "foo", 
+        "age" => 30, 
+  	    "email" => "foo@bar.com"];
+foreach ($arr as $key => $val) { 
+    echo $key . "=>" . $val . "\n";
+}
 ```
 
 
