@@ -527,71 +527,84 @@ foreach ($arr as $key => $val) {
 
 The passed number of arguments must much the function definition, except for the default arguments which are optional:
 
-```py
-def my_calc(x, y):
-    # Make sure the passed args are numbers
-    assert isinstance(x, (int, float))
-    assert isinstance(y, (int, float))
-    global num        # make num global
-    num = 3
-    z = 2 * x + y     # z is local to function
-    return z
-my_calc(1, 2)         # positional args
-my_calc(y = 2, x = 1) # named args
+```php
+function my_calc($x, $y) {
+    global $num;      // make $num global
+    $num = 3;
+    $z = 2 * $x + $y; // $z is local to function
+    return $z;
+}
+echo(my_calc(1, 2));        // positional args
+echo(my_calc(y: 2, x: 1));  // named args
 
-def default_return():
-    a = 1 + 1
-print(default_return()) # returns None
+function default_return() {
+    $a = 1 + 1;
+}
+var_dump(default_return()); // returns null
 
-def default_arg(name="everybody"):
-    return "Hello " + name + "!"
-print(default_arg())
+function default_arg($name = "everybody") {
+    return "Hello $name!\n";
+}
+echo(default_arg());
 ```
 
-Varargs implemented with tuple packing:
+**Varargs** are accessed by array:
 
-```py
-def my_min(*args): # args is a name of your choice
-    result = args[0]
-    for num in args:
-        if num < result:
-            result = num
-    return result
-my_min(4, 5, 6, 7, 2)
+```php
+function my_min(...$args) {
+    $result = $args[0];
+    foreach ($args as $num) {
+        if ($num < $result)
+            $result = $num;
+    }
+    return $result;
+}
+echo(my_min(4, 5, 6, 7, 2));
 ```
 
-Key-worded varargs implemented with dictionary packing:
+**Anonymous functions**:
 
-```py
-def my_func(**kwargs): # kwargs is a name of your choice
-    for kw in kwargs:
-        print(kw, ":", kwargs[kw])
-my_func(shopkeeper = "M. Palin", client = "J. Cleese")
+```php
+// Assign to a variable
+$greet = function($name) {
+    echo "Hello $name\n";
+};
+$greet('World');
+
+// Use as callback
+$nums = [1, 2, 3, 4, 5];
+$squared = array_map(function($n) {
+    return $n ** 2;
+}, $nums);
+print_r($squared);
 ```
 
-**Lambda** functions (anonymous functions):
+A **Closure** is a function that accesses variables from the enclosing scope, even after the outer functions are done. The used enclosing scope variables have to be listed comma separated through the `use` construct:
 
-```py
-lambda [args] : expression   # args comma separated
+```php
+function my_func($n) {
+    return function($a) use($n) {return $a * $n;};
+}
 
-greet = lambda : print('Hi') # zero args
-greet()                      # call like usual
-greet_name = lambda name : print('Hi', name)
-greet_name('John')
-x = lambda a, b : a * b
-print(x(3, 4))
+$my_doubler = my_func(2);
+$my_tripler = my_func(3);
+echo($my_doubler(3));
+echo($my_tripler(3));
 ```
+- Hint: prepend a `&` to the variables listed in `use` to include them *by-reference* instead of *by-value*.
 
-A **Closure** is a function that references variables from the enclosing scope, even after the outer functions are done:
+**Arrow functions** are a more concise syntax for anonymous functions. The variables from the enclosing scope are automatically included *by-value*:
 
-```py
-def my_func(n):
-    return lambda a : a * n
+```php
+// fn(argument_list) => expr
+function my_func($n) {
+    return fn($a) => $a * $n;
+}
 
-my_doubler = my_func(2)
-my_tripler = my_func(3)
-print(my_doubler(3))
-print(my_tripler(3))
+$my_doubler = my_func(2);
+$my_tripler = my_func(3);
+echo($my_doubler(3));
+echo($my_tripler(3));
 ```
 
 
