@@ -551,6 +551,7 @@ echo(default_arg());
 **Varargs** are accessed by array:
 
 ```php
+// $args is a name of your choice
 function my_min(...$args) {
     $result = $args[0];
     foreach ($args as $num) {
