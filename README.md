@@ -49,8 +49,14 @@ This document is a reference guide for PHP programming. It is a bit more than a 
   - [while](#while)
   - [for](#for)
   - [foreach](#foreach)
+    - [Indexed array](#indexed-array)
+    - [Key-value array](#key-value-array)
+    - [Object properties](#object-properties)
 - [Functions](#functions)
 - [Classes](#classes)
+  - [Basics](#basics)
+  - [Inheritance](#inheritance)
+  - [Interfaces](#interfaces)
 - [Modules](#modules)
   - [Import](#import)
   - [Conditional import](#conditional-import)
@@ -133,7 +139,7 @@ Under Linux/macOS to be able to execute a PHP script without invoking it through
 
 PHP is **case-sensitive**. A PHP block starts at `<?php` and ends with `?>` or at the end of the file. Comments start at `#` or `//` and end with the line or with the current block of PHP code, whichever comes first. Multi-line comments start with `/*` and end at the first `*/` encountered. 
 
-PHP programmers use both **snake_case** and **camelCase**.
+PHP programmers use both **snake_case** and **camelCase**; class names should be written in **PascalCase**.
 
 Statements are terminated by a **semicolon**.
 
@@ -508,17 +514,37 @@ for ($i = 0; $i < 10; $i += 1) {
 
 ### foreach
 
+#### Indexed array
+
 ```php
 $arr = [1, 2, 3];
 foreach ($arr as $val) { 
-	echo $val;
+    echo "$val\n";
 }
+```
 
+#### Key-value array
+
+```php
 $arr = ["name" => "foo", 
         "age" => 30, 
-  	    "email" => "foo@bar.com"];
+        "email" => "foo@bar.com"];
 foreach ($arr as $key => $val) { 
-    echo $key . "=>" . $val . "\n";
+    echo "$key => $val\n";
+}
+```
+
+#### Object properties
+
+```php
+class C {
+    public $prop1 = 1;
+    public $prop2 = 2;
+    public $prop3 = 3;
+}
+$obj = new C;
+foreach ($obj as $prop => $val) {
+    echo "$prop: $val\n";
 }
 ```
 
@@ -611,32 +637,77 @@ echo($my_tripler(3));
 
 ## Classes
 
-```py
-import math
+### Basics
 
-class Point:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-        
-    def get_x(self):
-        return self.x
-        
-    def get_y(self):
-        return self.y
-        
-class Asteroid(Point):
-    def __init__(self, x, y):
-        super().__init__(x, y)
-        
-    def compute_distance(self, other):
-        dist_x = self.x - other.get_x()
-        dist_y = self.y - other.get_y()
-        return math.sqrt(dist_x*dist_x + dist_y*dist_y)
-        
-a1 = Asteroid(0, 0)
-a2 = Asteroid(3, 4)
-print(a1.compute_distance(a2))
+```php
+class C1 {
+    public $prop1 = '1';
+    function __construct($prop1) {
+        $this->prop1 = $prop1;
+    }
+    function __destruct() {
+        echo "C1__destruct()\n";
+    }
+    function info() {
+        echo "$this->prop1\n";
+    }
+}
+
+$obj1 = new C1("First");
+$obj1->info();
+```
+- `__construct()` is the constructor method, only one per class.
+- `__destruct()` is the destructor method called when an object is destroyed with `unset($obj1)` or goes out of scope.
+- Within a class `$this` refers to the current object.
+- Properties are defined by using at least one modifier, that's the visibility or the `static` keyword.
+- The visibility is set for properties and methods, the default is `public` which means accessible from everywhere.
+- A `protected` visibility means accessible from within the class and by inheriting classes.
+- A `private` visibility means only accessible from within the class.
+- Declaring class properties / methods as `static` makes them accessible without needing an instantiation of the class. They are accessed through `ClassName::$prop / ClassName::method()` or from inside a method, with `self::$prop / self::method()`.
+
+### Inheritance
+
+```php
+class C2 extends C1 {
+    public $prop2 = '2';
+    function __construct($prop1, $prop2) {
+        parent::__construct($prop1);
+        $this->prop2 = $prop2;
+    }
+    function __destruct() {
+        echo "C2__destruct()\n";
+        parent::__destruct();
+    }
+    function info() {
+        echo "$this->prop1, $this->prop2\n";
+    }
+}
+
+$obj2 = new C2("First", "Second");
+$obj2->info();
+```
+- A child class inherits the parent's constructor and destructor if it does not implement them.
+- The constructor and destructor in a child class must explicitly call `parent::__construct()` and `parent::__destruct()`.
+- It's possible to override inherited methods by redefining them in a child class with the same name.
+
+
+### Interfaces
+
+An Interface specifies the public methods and since PHP 8.4.0 also the public properties that a class must implement. Interfaces can be inherited through the `extends` keyword.
+
+```php
+interface I {
+    public $prop { get; set; }
+    public function method();
+}
+class C implements I {
+    public $prop = 3;
+    public function method() {
+        echo "$this->prop\n";
+    }
+}
+$obj = new C;
+$obj->method();
 ```
 
 
