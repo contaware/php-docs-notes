@@ -457,7 +457,7 @@ Note: `switch` does a loose comparison (it uses `==`).
 
 ### try-except
 
-#### Introduction ####
+#### Introduction
 
 When an exception is thrown, code following the statement will not be executed, and PHP will attempt to find the first matching `catch` block, this means that **catch order matters!**
 
@@ -474,7 +474,7 @@ try {
 ```
 Hint: the classes `Exception` and `Error` both implement the `Throwable` interface. Catch `Throwable` to catch both of them.
 
-#### Purpose of finally ####
+#### Purpose of finally
 
 The `finally` block is often used to do clean-up work because it always runs.
 
