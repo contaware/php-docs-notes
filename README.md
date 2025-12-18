@@ -65,18 +65,12 @@ This document is a reference guide for PHP programming. It is a bit more than a 
 - [Packages](#packages)
   - [Use](#use)
   - [Manage](#manage)
-  - [Virtual environment](#virtual-environment)
-    - [Purpose](#purpose)
-    - [Linux/macOS](#linuxmacos)
-    - [Windows](#windows-1)
-    - [Check whether in virtual environment](#check-whether-in-virtual-environment)
   - [Examples of packages](#examples-of-packages)
 - [Math](#math)
 - [Random](#random)
 - [Time](#time)
 - [Date/Time](#datetime)
 - [JSON](#json)
-- [Jupyter](#jupyter)
 - [I/O and processes](#io-and-processes)
   - [Read file](#read-file)
   - [Write file](#write-file)
@@ -791,73 +785,6 @@ pip uninstall <pkgs>
 - Instead of installing globally, it's possible to use the `--user` option to install packages for the current user only. Note that on many Linux/macOS systems, installing without `sudo` implies the `--user` option. Listing with `--user` only shows packages installed with `--user`, while not using that option lists all packages.
 - To protect packages which may also be installed by your system package manager (like `apt` for example), since Python 3.11 some systems require the `--break-system-packages` option, and that also with the `--user` option.
 
-### Virtual environment
-
-#### Purpose
-
-It's possible to create an **isolated** Python installation with separate packages for each of your projects. By default only the packages explicitly installed in the virtual environment are accessible.
-
-#### Linux/macOS
-
-1. Go to your project's directory and the first time create a virtual environment in `.venv` directory:
-
-   ```
-   python3 -m venv .venv
-   ```
-
-2. Activate the virtual environment:
-
-   ```
-   . .venv/bin/activate
-   ```
-
-3. Install/uninstall packages with `pip` and execute your programs with `python`
-
-4. Deactivate the virtual environment (or just close the terminal):
-
-   ```
-   deactivate
-   ```
-
-#### Windows
-
-1. Go to your project's directory and the first time create a virtual environment in `.venv` directory:
-
-   ```
-   py -m venv .venv
-   ```
-
-2. Activate the virtual environment:
-
-   ```
-   .venv\Scripts\activate
-   ```
-
-3. Install/uninstall packages with `pip` and execute your programs with `python`
-
-4. Deactivate the virtual environment (or just close the terminal):
-
-   ```
-   deactivate
-   ```
-
-#### Check whether in virtual environment
-
-- From terminal it shows the path of `.venv`:
-
-  ```
-  pip -V
-  ```
-
-- From script:
-  
-  ```py
-  import sys
-  if sys.prefix != sys.base_prefix:
-      print("Inside virtual environment")
-  else:
-      print("Not inside virtual environment")
-  ```
 
 ### Examples of packages
 
@@ -979,27 +906,6 @@ print(user)
 json_str2 = json.dumps(user, indent=2)
 print(json_str2)
 ```
-
-
-## Jupyter
-
-Jupyter is a web based interactive IDE for writing code in cells. Each cell's output is stored in source file with its code.
-
-Install:
-
-```py
-pip install jupyter
-```
-
-Launch notebook web server:
-
-```py
-jupyter notebook
-```
-
-- To browser another location use the `--notebook-dir` option or change the terminal directory before launching the notebook.
-
-Note: Google provides a Jupyter cloud version called Colab.
 
 
 ## I/O and processes
