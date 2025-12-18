@@ -57,10 +57,9 @@ This document is a reference guide for PHP programming. It is a bit more than a 
   - [Basics](#basics)
   - [Inheritance](#inheritance)
   - [Interfaces](#interfaces)
-- [Modules](#modules)
-  - [Import](#import)
-  - [Conditional import](#conditional-import)
-  - [Custom](#custom)
+- [Include PHP files](#include-php-files)
+  - [include and require](#include-and-require)
+  - [Useful constants and variables](#useful-constants-and-variables)
   - [Direct run check](#direct-run-check)
 - [Packages](#packages)
   - [Use](#use)
@@ -705,47 +704,52 @@ $obj->method();
 ```
 
 
-## Modules
+## Include PHP files
 
-### Import
+### include and require
 
-- `import math, random`: every attribute or function are accessed by putting `math.` and `random.` in front of the name like `print(math.pi)` or `print(random.randint(0,9))`
+- `include 'file.php'`: include and evaluate a file, throw a warning if it fails.
+- `require 'file.php'`: include and evaluate a file, throw an error if it fails.
+- `include_once 'file.php'` or `require_once 'file.php'`: include and evaluate a file **once only** and on failure behave like `include` or `require`.
 
-- `import numpy as np`: this renames `numpy` to `np` within the script. Note that the name `numpy` itself is no longer valid.
+There are two important distinctions to consider when providing the file:
 
-- `from fibo import fib, fib2`: this imports names from a module directly into the importing module's symbol table. This does not introduce the module name from which the imports are taken in the local symbol table (so in the example, `fibo` is not defined).
+1. **File is provided without a path**. The `include_path` directories-list, which can be checked through `get_include_path()`, is used to find the file. If a file is not found, the search continues in the calling script's own directory and the current working directory. 
 
-- `from fibo import *`: this imports all names that a module defines. Do not use this facility since it introduces an unknown set of names into the interpreter, possibly hiding some things you have already defined.
+2. **File is provided with a relative or an absolute path**. A relative path may be relative to the calling script's own directory, but also relative the current working directory. For this reason it's always better to provide an absolute path by using `__DIR__` or `$_SERVER['DOCUMENT_ROOT']`.
 
-### Conditional import
+### Useful constants and variables
 
-```py
-try:
-    import cowsay
-except ImportError:
-    cowsay = None
-if cowsay:
-    cowsay.cow("Good Morning!")
-else:
-    print("Good Morning! (cowsay not installed)")
-```
+- `__FILE__` is the full path and filename of the file with symlinks resolved. If used inside an include, the name of the included file is returned.
 
-### Custom
+- `__DIR__` is the directory of the file. If used inside an include, the directory of the included file is returned. This directory name does not have a trailing slash unless it is the root directory.
 
-To make your own module just write a normal Python file and then import it without the `.py` extension:
+- `$_SERVER['DOCUMENT_ROOT']` returns the absolute path to the web server's document root. It can have a trailing slash or not, and it may be empty when accessed from a command line PHP script.
 
-```py
-import mymodule
-mymodule.myfunc("Hi")
-```
+- `$_SERVER['SCRIPT_FILENAME']` returns the absolute path of the currently executing script.
 
 ### Direct run check
 
-To check whether a module is execute directly (without import):
+Compare `__FILE__` with `$_SERVER['SCRIPT_FILENAME']`:
 
-```py
-if __name__ == "__main__":
-    print("Running this module")
+```php
+if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME']))
+    echo __FILE__ . " is called directly\n";
+else
+    echo __FILE__ . " has been included/required\n";
+```
+- With `basename()` we account for possible differences in the directory separator, especially on Windows. But note that if the files have the same base name, we have to remove those `basename()` calls.
+
+Test a constant defined in the main script:
+
+```php
+/* main.php */
+define('FLAG_FROM_PARENT', 1);
+include 'included.php';
+
+/* included.php */
+if (!defined('FLAG_FROM_PARENT'))
+    die('No direct run allowed.');
 ```
 
 
