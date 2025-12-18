@@ -757,52 +757,22 @@ if (!defined('FLAG_FROM_PARENT'))
 
 ### Use
 
-Packages are a way of structuring the module namespace by using "dotted module names". For example, the module name `pkgA.modB` designates a submodule named `modB` in a package named `pkgA`.
+Packages are installed via **Composer**.
 
-- `import sound.effects.echo`: this imports an individual module from the package. A function is referenced like `sound.effects.echo.echofilter()`.
-
-- `from sound.effects import echo`: a function is referenced like `echo.echofilter()`.
-
-- `from sound.effects.echo import echofilter`: the function is referenced like `echofilter()`.
 
 ### Manage
-
-To search for a package use [pypi.org/search](https://pypi.org/search/).
-
-The Python Package Manager (pip) should be called through the correct Python version:
-
-- Linux/macOS: `python3 -m pip ...`
-- Windows: `py -m pip ...`
-
-Typical commands (invoke `pip` like shown above):
-
-```
-pip list -v
-pip show <pkg>
-pip install <pkgs>
-pip install --dry-run <pkgs>
-pip install --upgrade <pkgs>
-pip uninstall <pkgs>
-```
-
-- The `pip` package names aren't case sensitive.
-- Instead of installing globally, it's possible to use the `--user` option to install packages for the current user only. Note that on many Linux/macOS systems, installing without `sudo` implies the `--user` option. Listing with `--user` only shows packages installed with `--user`, while not using that option lists all packages.
-- To protect packages which may also be installed by your system package manager (like `apt` for example), since Python 3.11 some systems require the `--break-system-packages` option, and that also with the `--user` option.
 
 
 ### Examples of packages
 
-- App frameworks: `kivy` `tkinter` `pyqt` / `pyside`
-- Web frameworks: `django` `flask`
-- CLI frameworks: `click` `rich` `pyfiglet`
-- Config: `configparser` `xml` `json`
-- Text: `csv` `pypdf`
-- Develop: `loguru` `python-dotenv` `pytest`
-- Multimedia: `audioflux` `pillow` `moviepy` `opencv` `simplecv` `scikit-image`
-- Games: `pygame` `pyglet`
-- Network: `requests` `httpx` `scrapy` `beautifulsoup` `twisted`
-- Math: `pandas` `numpy` `scipy` `sympy` `matplotlib` `plotly` `seaborn`
-- Machine learning: `scikit-learn` `tensorflow` `keras` `pytorch`
+- App frameworks: `nativephp/electron`
+- Web frameworks: `laravel/framework`
+- CLI frameworks: `symfony/console`
+- Text: `michelf/php-markdown` `tecnickcom/tc-lib-pdf`
+- Develop: `phpunit/phpunit` `monolog/monolog` `symfony/dotenv`
+- Multimedia: `intervention/image` `php-ffmpeg/php-ffmpeg`
+- Network: `guzzlehttp/guzzle` `phpmailer/phpmailer`
+- Math: `markrogoyski/math-php`
 
 
 ## Math
