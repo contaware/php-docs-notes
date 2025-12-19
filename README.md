@@ -842,17 +842,18 @@ Attention: avoid cryptographically insecure functions such as `lcg_value()`, `mt
 
 ## Time
 
-```py
-import time
+```php
+// Pause execution for given us
+usleep(1500000);
 
-# Pause execution for the given seconds
-time.sleep(1.5);
-
-# Measuring execution time
-start_time = time.time() # seconds since the Unix epoch
-# some code...
-end_time = time.time()   # seconds since the Unix epoch
-print("Execution Time:", end_time - start_time, "sec")
+// Measuring execution time
+// microtime(true) returns sec 
+// since the Unix epoch as float
+$start_time = microtime(true);
+// some code...
+$end_time = microtime(true);
+printf("Execution Time: %f sec\n", 
+    $end_time - $start_time);
 ```
 
 
