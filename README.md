@@ -815,24 +815,29 @@ var_dump(PHP_FLOAT_MAX*10);
 
 ## Random
 
-There is no need to call `random.seed()` as it is called for us with the OS's randomness sources.
+There is no need to seed the following functions, it's done for us by the operating system:
 
-```py
-import random
+```php
+// Floating-point
+use Random\IntervalBoundary;
+use Random\Randomizer;
+$rnd = new Randomizer();
+// 0.0 <= $x < 1.0
+$x = $rnd->nextFloat();
+// 0.0 <= $x <= 1.0
+$x = $rnd->getFloat(0.0, 1.0, 
+    IntervalBoundary::ClosedClosed);
 
-# Floating-point
-x = random.random() # 0.0 <= x < 1.0
+// Integer
+// $a <= $y <= $b
+$y = random_int($a, $b);
 
-# Integer
-# Note: random.randint(a, b)
-#                 =
-#       random.randrange(a, b+1)
-y = random.randint(a, b) # a <= y <= b
-
-# Randomly select an element from:
-# range(start, stop, step)
-z = random.randrange(start, stop, step)
+// Hex string
+$bytes = random_bytes(16);
+var_dump(bin2hex($bytes));
 ```
+
+Attention: avoid cryptographically insecure functions such as `lcg_value()`, `mt_rand()`, `rand()` (alias for `mt_rand()`) and `array_rand()`.
 
 
 ## Time
