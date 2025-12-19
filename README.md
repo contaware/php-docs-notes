@@ -194,6 +194,8 @@ Bitwise:          ~ | & ^
 Shift:            << >>
 String concat:    . .=
 ```
+- The division operator `/` performs a floating-point division, but it returns an `int` when the two operands are `int` and the result is an integer number.
+- Operands of the modulo operator `%` are converted to `int` before processing.
 
 
 ## echo, format, input
@@ -777,29 +779,38 @@ Packages are installed via **Composer**.
 
 ## Math
 
-```py
-import math
-import sys
+For the following examples, `...` means that multiple comma-separated numbers or an array can be provided, `$num` can either be `int` or `float` and `$flt` is a `float`:
 
-# Math functions
-print(math.sin(math.pi/2))
-print(math.sqrt(81))
-print(math.log(math.e))       # default base is e
-print(math.log(10, 10))       # 2nd arg is base
+```php
+$num = abs($num);
+$flt = round($num);
+$num = min(...);
+$num = max(...);
+$flt = sqrt($num);
+$flt = log($num);   // base M_E
+$flt = log10($num); // base 10
 
-# Not a number
-x = float('nan')              # or: math.nan
-print(math.isnan(x))
-print(math.isfinite(x))       # True if not inf and not nan
-print(math.inf/math.inf)      # nan
-
-# Infinity
-pos_inf = float('inf')        # or: math.inf
-neg_inf = float('-inf')       # or: -math.inf
-print(math.isinf(pos_inf))    # True if positive or negative inf
-print(math.isfinite(neg_inf)) # True if not inf and not nan
-print(sys.float_info.max*10)  # inf
+// 2*M_PI rad = 360°
+$flt = sin($num);   // in rad
+$flt = rad2deg($num);
+$flt = deg2rad($num);
 ```
+
+```php
+// Not a number
+$nan = NAN;
+var_dump(is_nan($nan));
+var_dump(is_finite($nan));
+var_dump(INF/INF);
+
+// Infinity
+$pos_inf = INF;
+$neg_inf = -INF;
+var_dump(is_infinite($pos_inf));
+var_dump(is_finite($neg_inf));
+var_dump(PHP_FLOAT_MAX*10);
+```
+- `is_finite()` returns `true` if its argument is not `INF` and not `NAN`.
 
 
 ## Random
