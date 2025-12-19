@@ -859,27 +859,70 @@ printf("Execution Time: %f sec\n",
 
 ## Date/Time
 
-```py
-import datetime
+We use `DateTimeImmutable` which behaves the same as `DateTime` except that new objects are returned when modification methods are called. This class stores the timezone along with the date and time, this permits doing comparisons and difference calculations between objects that are in different timezones.
 
-# Now
-now = datetime.datetime.now() # local time
-now_utc = datetime.datetime.now(datetime.UTC)
+Set the local [timezone](https://www.php.net/manual/timezones.php) in `php.ini` and/or at the top of your PHP script:
 
-# Construct local time
-print(datetime.datetime(2018, 8, 18, 10, 5, 56, 518515))
+```php
+// php.ini
+date.timezone = "America/Lima"
 
-# Format
-print(now.strftime("%d.%m.%Y %H:%M:%S"))
-print(now_utc.isoformat(timespec='seconds'))
+// At the top of each script or 
+// for each request
+date_default_timezone_set('America/Lima');
 
-# Time delta (uses wall clock time semantics)
-# days seconds microseconds milliseconds minutes hours weeks
-print(now + datetime.timedelta(hours=1, seconds=1))
+// Check timezone
+var_dump(ini_get('date.timezone'));
+var_dump(date_default_timezone_get());
+```
+
+The most common Data/Time operations:
+
+```php
+// Now
+$now = new DateTimeImmutable(); // local time
+$now_utc = new DateTimeImmutable('now', 
+    new DateTimeZone('UTC'));
+$now_lima = new DateTimeImmutable('now', 
+    new DateTimeZone('America/Lima'));
+
+// Convert to another timezone
+$now_rome = $now_lima->setTimezone(
+    new DateTimeZone('Europe/Rome'));
+// point-in-time is not changed
+assert($now_rome == $now_lima);
+
+// Construct local time and UTC
+$dt = new DateTimeImmutable('2018-08-18 10:05:56');
+$dt_utc = new DateTimeImmutable('2018-08-18 10:05:56',
+    new DateTimeZone('UTC'));
+
+// Format
+echo $now->format('d.m.Y H:i:s') . "\n";
+echo $dt->format(DateTimeInterface::ATOM) . "\n";
+
+// Time add/sub
+// - Order is important
+// - P is mandatory
+// - T necessary if providing time elements
+// P  xY  xM  xD  T  xH  xM  xS
+$now_add = $now->add(new DateInterval('PT1H1S'));
+$now_sub = $now->sub(new DateInterval('P2YT1M'));
+
+// Calculate time difference
+// - For negative intervals: invert = 1
+// - diff() will set total number of days
+var_dump($now->diff($now_add));
+var_dump($now->diff($now_sub));
+
+// Compare
+if ($now < $now_add)
+    echo '$now_add is later' . "\n";
 
 # Unix/POSIX timestamp
-ts = now.timestamp()
-print(ts, datetime.datetime.fromtimestamp(ts))
+$now_ts = $now->getTimestamp();    // integer sec
+$now_approx = new DateTimeImmutable('@' . $now_ts);
+var_dump($now_approx->diff($now)); // diff in $f
 ```
 
 
