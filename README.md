@@ -944,17 +944,24 @@ var_dump($now_approx->diff($now)); // diff in $f
 
 ## JSON
 
-```py
-import json
-json_str = '{"first_name": "John", "last_name": "Doe", "age": 30}'
+```php
+$json_str = '{
+    "first_name": "John",
+    "last_name": "Doe",
+    "age": 30
+}';
 
-# json str -> dict
-user = json.loads(json_str)
-print(user)
+// json string -> array
+$arr = json_decode($json_str, true);
+var_dump($arr);
 
-# dict -> json str
-json_str2 = json.dumps(user, indent=2)
-print(json_str2)
+// json string -> object
+$obj = json_decode($json_str, false);
+var_dump($obj);
+
+// array or object -> json string
+$json_str2 = json_encode($arr);
+var_dump($json_str2);
 ```
 
 
