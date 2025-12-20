@@ -24,6 +24,7 @@ This document is a reference guide for PHP programming. It is a bit more than a 
   - [Read input line](#read-input-line)
 - [Strings](#strings)
   - [Single vs Double quotes](#single-vs-double-quotes)
+  - [Multi-line strings](#multi-line-strings)
   - [Common functions](#common-functions)
   - [Regular expression](#regular-expression)
 - [Arrays](#arrays)
@@ -232,6 +233,18 @@ printf('Your number+1 is %d', (int)$n+1);
 ### Single vs Double quotes
 
 **Single-quoted** strings are almost not interpreted, except for `'\\'` and `'\''`. **Double-quoted** strings support escape sequences like `"\n"` and many more, and variables are evaluated. Delimit a variable name with curly braces, for example `"{$foo}bar"`.
+
+### Multi-line strings
+
+```php
+$multiline1 = "line1
+line2";
+echo $multiline1 . "\n";
+
+$multiline2 = 'line1
+line2';
+echo $multiline2 . "\n";
+```
 
 ### Common functions
 
