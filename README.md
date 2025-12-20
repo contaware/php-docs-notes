@@ -919,7 +919,10 @@ var_dump($now->diff($now_sub));
 if ($now < $now_add)
     echo '$now_add is later' . "\n";
 
-# Unix/POSIX timestamp
+// Unix/POSIX timestamp
+// - In constructor provide timestamp with @
+// - When constructing with a timestamp, the 
+//   timezone will always be set to UTC
 $now_ts = $now->getTimestamp();    // integer sec
 $now_approx = new DateTimeImmutable('@' . $now_ts);
 var_dump($now_approx->diff($now)); // diff in $f
