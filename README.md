@@ -1093,11 +1093,13 @@ echo %errorlevel%
 
 ### Environment variables
 
-```py
-import os
-os.environ['VAR']                # error if VAR not defined
-os.environ.get('VAR', 'default') # default if VAR not defined
+`getenv()` returns the value of the given environment variable, or `false` if the environment variable does not exist. If no name is provided, all environment variables are returned as an associative array:
+
+```php
+echo getenv('PATH') . "\n";
+print_r(getenv()); // all
 ```
+- On Windows `getenv()` is case-insensitive, while on all the other systems it is case-sensitive.
 
 ### Path
 
