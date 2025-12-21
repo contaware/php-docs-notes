@@ -72,6 +72,7 @@ This document is a reference guide for PHP programming. It is a bit more than a 
 - [Date/Time](#datetime)
 - [JSON](#json)
 - [I/O and processes](#io-and-processes)
+  - [Binary and text mode](#binary-and-text-mode)
   - [Read file](#read-file)
   - [Write file](#write-file)
   - [stdin](#stdin)
@@ -967,68 +968,92 @@ var_dump($json_str2);
 
 ## I/O and processes
 
+### Binary and text mode
+
+To the file modes (`'r'`, `'w'`, `'a'`) we can append a translation mode. If no translation mode is supplied, the default is the binary mode `'b'`, this mode will not translate your data. Windows offers a text mode translation flag `'t'` which will transparently translate `\n` to `\r\n` when working with the file.
+
 ### Read file
 
-By default a file is opened in read and text mode. Opening fails if the file does not exist. Open with the `encoding='utf-8'` argument to make sure utf-8 is used on all systems.
+Classic file open, read and close:
 
-To open a file in binary mode use `'rb'`.
+```php
+$file = fopen('my_file.txt', 'r');
 
-```py
-my_file = open('my_file.txt')    # default mode is 'r'
-for line in my_file:
-    print(line.rstrip())         # trim trailing newline
-my_file.seek(0)	                 # move to the beginning
-lines1 = my_file.readlines()     # newline characters not removed
-print(lines1)                    # print lines list
-my_file.seek(0)	                 # move to the beginning
-text = my_file.read()            # slurp file in one go
-lines2 = text.splitlines()       # newline characters removed
-print(lines2)                    # print lines list                    
-print(my_file.name)              # file name
-print(my_file.mode)              # file mode
-print(my_file.closed)            # is file closed?
-my_file.close()
+// Read entire file
+$content = fread($file, 
+    filesize('my_file.txt'));
+echo $content;
+
+// Move to beginning
+fseek($file, 0);
+
+// Read lines returning also line-ending
+while (($line = fgets($file)) !== false)
+    echo $line;
+
+fclose($file);
 ```
+- `fgets()` works well with unix and windows line-ending in both binary and text mode. 
+
+Helper functions:
+
+```php
+// Read entire file
+$content = file_get_contents('my_file.txt');
+echo $content;
+
+// Read all non-empty lines into an array
+$lines = file('my_file.txt', 
+    FILE_IGNORE_NEW_LINES | 
+    FILE_SKIP_EMPTY_LINES);
+var_dump($lines);
+```
+- `file_get_contents()` is binary-safe, and it will return `false` on failure.
+- `file()` works well with unix and windows line-ending.
 
 ### Write file
 
-The write mode is `'w'`, and the append mode is `'a'`; for both cases the file is written in text mode and created if not existing. By default the line ending is automatically converted depending from the system. To always use a specific line ending open with the `newline='\n'` argument. Open with the `encoding='utf-8'` argument to make sure utf-8 is used on all systems.
+The write mode is `'w'`, and the append mode is `'a'`; for both cases the file is created if not existing:
 
-To open a file in binary mode use `'wb'` or `'ab'`.
-
-```py
-my_file = open('my_file.txt', 'w')
-my_file.write('some text\n')
-print('another line', file=my_file) # print adds a newline
-my_file.close()
+```php
+$file = fopen('my_file.txt', 'w');
+fwrite($file, "Line1\nLine2\n");
+fclose($file);
 ```
+
+Helper function:
+
+```php
+// Overwrite
+file_put_contents('my_file.txt',
+    "Line1\nLine2\n");
+
+// Append
+file_put_contents('my_file.txt',
+    "Line1\nLine2\n",
+    FILE_APPEND);
+```
+- `file_put_contents()` is binary-safe, and it will return `false` on failure.
 
 ### stdin
 
-```py
-import sys
-for line in sys.stdin:
-    do_stuff_with(line.rstrip()) # trim trailing newline
-text = sys.stdin.read()          # slurp stdin in one go
-
-# Hint: interrupt by sending EOF on its own line
-#       (Ctrl-D on Linux/macOS or CTRL-Z on Windows)
+```php
+$count = 0;
+while (($line = fgets(STDIN)) !== false)
+    echo $count++ . ": $line";
 ```
+- Hint: interrupt by sending EOF on its own line (Ctrl-D on Linux/macOS or CTRL-Z on Windows).
 
 ### stdout
 
-```py
-import sys
-print('Hello, stdout.')
-sys.stdout.write('Hello, stdout.\n')
+```php
+fwrite(STDOUT, "Hello, stdout.\n");
 ```
 
 ### stderr
 
-```py
-import sys
-print('a logging message.', file=sys.stderr)
-sys.stderr.write('a logging message.\n')
+```php
+fwrite(STDERR, "Hello, stderr.\n");
 ```
 
 ### Arguments
