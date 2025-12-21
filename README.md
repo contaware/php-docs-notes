@@ -1042,7 +1042,7 @@ $count = 0;
 while (($line = fgets(STDIN)) !== false)
     echo $count++ . ": $line";
 ```
-- Hint: interrupt by sending EOF on its own line (Ctrl-D on Linux/macOS or CTRL-Z on Windows).
+- Hint: interrupt by sending EOF on its own line (`Ctrl-D` on Linux/macOS or `CTRL-Z` on Windows).
 
 ### stdout
 
@@ -1058,21 +1058,38 @@ fwrite(STDERR, "Hello, stderr.\n");
 
 ### Arguments
 
-```py
-import sys
-for arg in sys.argv[1:]: # skip argv[0]
-    print(arg)
+```php
+// Skip $argv[0]
+$args = array_slice($argv, 1);
+foreach ($args as $arg)
+    echo "$arg\n";
 ```
 
 ### Exit process
 
-The `sys.exit` function raises a SystemExit exception, signaling an intention to exit the interpreter.
+`exit` prints an optional message and then terminates the current script returning an exit code. There is also `die` which is an alias of `exit`:
 
-```py
-import sys
-sys.exit()  # no error, same as sys.exit(0)
-sys.exit(1) # error range: 1-127
+```php
+exit;          // ret code 0
+exit();        // ret code 0
+exit("bye\n"); // msg & ret code 0
+exit(1);       // ret given code
 ```
+- If you provide an exit code, it should be between 0 and 254. Exit code 255 is reserved by PHP.
+
+View exit code on Linux/macOS:
+
+```bash
+php ./script.php; echo $?
+```
+
+View exit code on Windows:
+
+```bat
+php.exe script.php
+echo %errorlevel%
+```
+- Note: because delayed expansion is disabled by default, we cannot run the above two commands in one line.
 
 ### Environment variables
 
