@@ -77,9 +77,9 @@ This document is a reference guide for PHP programming. It is a bit more than a 
   - [Write file](#write-file)
   - [stdin stdout stderr](#stdin-stdout-stderr)
   - [File operations](#file-operations)
+  - [Environment variables](#environment-variables)
   - [Arguments](#arguments)
   - [Exit process](#exit-process)
-  - [Environment variables](#environment-variables)
   - [Processes](#processes)
 
 
@@ -1141,6 +1141,16 @@ foreach ($rii as $fi) {
 }
 ```
 
+### Environment variables
+
+`getenv()` returns the value of the given environment variable, or `false` if the environment variable does not exist. If no name is provided, all environment variables are returned as an associative array:
+
+```php
+echo getenv('PATH') . "\n";
+print_r(getenv()); // all
+```
+- On Windows `getenv()` is case-insensitive, while on all the other systems it is case-sensitive.
+
 ### Arguments
 
 ```php
@@ -1175,16 +1185,6 @@ php.exe script.php
 echo %errorlevel%
 ```
 - Note: because delayed expansion is disabled by default, we cannot run the above two commands in one line.
-
-### Environment variables
-
-`getenv()` returns the value of the given environment variable, or `false` if the environment variable does not exist. If no name is provided, all environment variables are returned as an associative array:
-
-```php
-echo getenv('PATH') . "\n";
-print_r(getenv()); // all
-```
-- On Windows `getenv()` is case-insensitive, while on all the other systems it is case-sensitive.
 
 ### Processes
 
