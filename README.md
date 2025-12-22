@@ -552,7 +552,7 @@ class C {
     public $prop2 = 2;
     public $prop3 = 3;
 }
-$obj = new C;
+$obj = new C();
 foreach ($obj as $prop => $val) {
     echo "$prop: $val\n";
 }
@@ -716,7 +716,7 @@ class C implements I {
         echo "$this->prop\n";
     }
 }
-$obj = new C;
+$obj = new C();
 $obj->method();
 ```
 
