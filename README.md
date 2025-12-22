@@ -80,7 +80,7 @@ This document is a reference guide for PHP programming. It is a bit more than a 
   - [Environment variables](#environment-variables)
   - [Arguments](#arguments)
   - [Exit process](#exit-process)
-  - [Processes](#processes)
+  - [Execute process](#execute-process)
 
 
 ## Install
@@ -1186,7 +1186,7 @@ echo %errorlevel%
 ```
 - Note: because delayed expansion is disabled by default, we cannot run the above two commands in one line.
 
-### Processes
+### Execute process
 
 ```php
 // Execute a command and when done 
