@@ -72,6 +72,7 @@ This document is a reference guide for PHP programming. It is a bit more than a 
   - [Time](#time)
   - [Date/Time](#datetime)
   - [JSON](#json)
+  - [CSV](#csv)
   - [I/O and Processes](#io-and-processes)
     - [Binary and text mode](#binary-and-text-mode)
     - [Read file](#read-file)
@@ -829,7 +830,6 @@ var_dump(PHP_FLOAT_MAX*10);
 ```
 - `is_finite()` returns `true` if its argument is not `INF` and not `NAN`.
 
-
 ### Random
 
 There is no need to seed the following functions, it's done for us by the operating system:
@@ -856,7 +856,6 @@ var_dump(bin2hex($bytes));
 
 Attention: avoid cryptographically insecure functions such as `lcg_value()`, `mt_rand()`, `rand()` (alias for `mt_rand()`) and `array_rand()`.
 
-
 ### Time
 
 ```php
@@ -872,7 +871,6 @@ $end_time = microtime(true);
 printf("Execution Time: %f sec\n", 
     $end_time - $start_time);
 ```
-
 
 ### Date/Time
 
@@ -945,7 +943,6 @@ $now_approx = new DateTimeImmutable('@' . $now_ts);
 var_dump($now_approx->diff($now)); // diff in $f
 ```
 
-
 ### JSON
 
 ```php
@@ -968,6 +965,19 @@ $json_str2 = json_encode($arr);
 var_dump($json_str2);
 ```
 
+### CSV
+
+```php
+$in = fopen('in.csv', 'r');
+$out = fopen('out.csv', 'w');
+while (($arr = fgetcsv($in, null, ",", "\"", "")) !== false) {
+    print_r($arr);
+    fputcsv($out, $arr, ",", "\"", "", "\n");
+}
+fclose($out);
+fclose($in);
+```
+- To be CSV compliant we use the empty string `""` as **escape** character. In future PHP releases that parameter will change its default to the empty string or removed altogether.
 
 ### I/O and Processes
 
