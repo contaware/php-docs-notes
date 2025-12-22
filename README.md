@@ -13,7 +13,7 @@ This document is a reference guide for PHP programming. It is a bit more than a 
   - [Windows](#windows)
 - [Shebang line](#shebang-line)
 - [Syntax](#syntax)
-- [Variables and constants](#variables-and-constants)
+- [Variables and Constants](#variables-and-constants)
   - [Introduction](#introduction)
   - [Data types](#data-types)
   - [Passing by value or reference](#passing-by-value-or-reference)
@@ -66,21 +66,22 @@ This document is a reference guide for PHP programming. It is a bit more than a 
   - [Use](#use)
   - [Manage](#manage)
   - [Examples of packages](#examples-of-packages)
-- [Math](#math)
-- [Random](#random)
-- [Time](#time)
-- [Date/Time](#datetime)
-- [JSON](#json)
-- [I/O and processes](#io-and-processes)
-  - [Binary and text mode](#binary-and-text-mode)
-  - [Read file](#read-file)
-  - [Write file](#write-file)
-  - [stdin stdout stderr](#stdin-stdout-stderr)
-  - [File operations](#file-operations)
-  - [Environment variables](#environment-variables)
-  - [Arguments](#arguments)
-  - [Exit process](#exit-process)
-  - [Execute process](#execute-process)
+- [Built-in Functions and Classes](#built-in-functions-and-classes)
+  - [Math](#math)
+  - [Random](#random)
+  - [Time](#time)
+  - [Date/Time](#datetime)
+  - [JSON](#json)
+  - [I/O and Processes](#io-and-processes)
+    - [Binary and text mode](#binary-and-text-mode)
+    - [Read file](#read-file)
+    - [Write file](#write-file)
+    - [stdin stdout stderr](#stdin-stdout-stderr)
+    - [File operations](#file-operations)
+    - [Environment variables](#environment-variables)
+    - [Arguments](#arguments)
+    - [Exit process](#exit-process)
+    - [Execute process](#execute-process)
 
 
 ## Install
@@ -140,7 +141,7 @@ Most PHP style guides recommend **indenting** by **four spaces** rather than usi
 PHP uses **zero based indexing**.
 
 
-## Variables and constants
+## Variables and Constants
 
 ### Introduction
 
@@ -791,7 +792,9 @@ Packages are installed via **Composer**.
 - Math: `markrogoyski/math-php`
 
 
-## Math
+## Built-in Functions and Classes
+
+### Math
 
 For the following examples, `...` means that multiple comma-separated numbers or an array can be provided, `$num` can either be `int` or `float` and `$flt` is a `float`:
 
@@ -827,7 +830,7 @@ var_dump(PHP_FLOAT_MAX*10);
 - `is_finite()` returns `true` if its argument is not `INF` and not `NAN`.
 
 
-## Random
+### Random
 
 There is no need to seed the following functions, it's done for us by the operating system:
 
@@ -854,7 +857,7 @@ var_dump(bin2hex($bytes));
 Attention: avoid cryptographically insecure functions such as `lcg_value()`, `mt_rand()`, `rand()` (alias for `mt_rand()`) and `array_rand()`.
 
 
-## Time
+### Time
 
 ```php
 // Pause execution for given us
@@ -871,7 +874,7 @@ printf("Execution Time: %f sec\n",
 ```
 
 
-## Date/Time
+### Date/Time
 
 We use `DateTimeImmutable` which behaves the same as `DateTime` except that new objects are returned when modification methods are called. This class stores the timezone along with the date and time, this permits doing comparisons and difference calculations between objects that are in different timezones.
 
@@ -943,7 +946,7 @@ var_dump($now_approx->diff($now)); // diff in $f
 ```
 
 
-## JSON
+### JSON
 
 ```php
 $json_str = '{
@@ -966,13 +969,13 @@ var_dump($json_str2);
 ```
 
 
-## I/O and processes
+### I/O and Processes
 
-### Binary and text mode
+#### Binary and text mode
 
 To the file modes (`'r'`, `'w'`, `'a'`) we can append a translation mode. If no translation mode is supplied, the default is the binary mode `'b'`, this mode will not translate your data. Windows offers a text mode translation flag `'t'` which will transparently translate `\n` to `\r\n` when working with the file.
 
-### Read file
+#### Read file
 
 Classic file open, read and close:
 
@@ -1011,7 +1014,7 @@ var_dump($lines);
 - `file_get_contents()` is binary-safe, and it will return `false` on failure.
 - `file()` works well with unix and windows line-ending.
 
-### Write file
+#### Write file
 
 The write mode is `'w'`, and the append mode is `'a'`; for both cases the file is created if not existing:
 
@@ -1035,7 +1038,7 @@ file_put_contents('my_file.txt',
 ```
 - `file_put_contents()` is binary-safe, and it will return `false` on failure.
 
-### stdin stdout stderr
+#### stdin stdout stderr
 
 ```php
 $count = 0;
@@ -1048,7 +1051,7 @@ fwrite(STDERR, "Hello, stderr.\n");
 ```
 - Hint: interrupt stdin by sending an `EOF` on its own line (`Ctrl-D` on Linux/macOS or `CTRL-Z` on Windows).
 
-### File operations
+#### File operations
 
 ```php
 // Make full path to a unique temp filename
@@ -1141,7 +1144,7 @@ foreach ($rii as $fi) {
 }
 ```
 
-### Environment variables
+#### Environment variables
 
 `getenv()` returns the value of the given environment variable, or `false` if the environment variable does not exist. If no name is provided, all environment variables are returned as an associative array:
 
@@ -1151,7 +1154,7 @@ print_r(getenv()); // all
 ```
 - On Windows `getenv()` is case-insensitive, while on all the other systems it is case-sensitive.
 
-### Arguments
+#### Arguments
 
 ```php
 // Skip $argv[0]
@@ -1160,7 +1163,7 @@ foreach ($args as $arg)
     echo "$arg\n";
 ```
 
-### Exit process
+#### Exit process
 
 `exit` prints an optional message and then terminates the current script returning an exit code. There is also `die` which is an alias of `exit`:
 
@@ -1186,7 +1189,7 @@ echo %errorlevel%
 ```
 - Note: because delayed expansion is disabled by default, we cannot run the above two commands in one line.
 
-### Execute process
+#### Execute process
 
 ```php
 // Execute a command and when done 
