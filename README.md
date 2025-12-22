@@ -81,7 +81,7 @@ This document is a reference guide for PHP programming. It is a bit more than a 
   - [Arguments](#arguments)
   - [Exit process](#exit-process)
   - [Environment variables](#environment-variables)
-  - [Path](#path)
+  - [File operations](#file-operations)
   - [Terminal](#terminal)
   - [Processes](#processes)
 
@@ -1101,40 +1101,97 @@ print_r(getenv()); // all
 ```
 - On Windows `getenv()` is case-insensitive, while on all the other systems it is case-sensitive.
 
-### Path
+### File operations
 
-```py
-from pathlib import Path
-p = Path('C:\\Windows')
-p = Path()     # rel. path of current dir
-p = Path.cwd() # abs. path of current dir
-p.resolve()    # abs. physical path
-str(p)         # convert to string
+```php
+// Make full path to a unique temp filename
+// - On Windows the file has a .tmp extension
+// - On Windows the prefix is limited to 3 chars
+$path = tempnam(sys_get_temp_dir(), 'pre');
 
-# Script dir & path join operator /
-p = Path(__file__).resolve().parent / 'test.txt'
+// Split path
+print_r(pathinfo($path));  // all
+var_dump(pathinfo($path, PATHINFO_DIRNAME));
+var_dump(dirname($path));  // same as above
+var_dump(pathinfo($path, PATHINFO_BASENAME));
+var_dump(basename($path)); // same as above
+var_dump(pathinfo($path, PATHINFO_EXTENSION));
+var_dump(pathinfo($path, PATHINFO_FILENAME));
 
-# Iterate
-for i in sorted(p.iterdir(), reverse = True):
-    print(i)
-for i in sorted(p.glob('*.py'), reverse = True):
-    print(i)
+// Get the current working directory
+var_dump(getcwd());
 
-p.name
-p.parent
-p.parts
-p.stat().st_size
-p.stat().st_mtime
-p.is_dir()
-p.is_file()
-p.unlink()
-p.rename(target)
-p.mkdir()
-p.rmdir()
+// Return the absolute pathname
+var_dump(realpath($path));
 
-import shutil
-shutil.copytree('src', 'dest') # recursive copy
-shutil.rmtree('a_dir')         # recursive delete
+// Strip trailing directory separator
+$dir = rtrim($dir, '/\\'); // if mixed
+$dir = rtrim($dir, DIRECTORY_SEPARATOR);
+
+// true if it exists and it is a regular file
+var_dump(is_file($path));
+
+// true if it exists and it is a dir
+var_dump(is_dir($path));
+
+// File size in bytes
+var_dump(filesize($path));
+
+// Modification time in UTC
+$ts = filemtime($path); // Unix timestamp
+var_dump(new DateTimeImmutable('@' . $ts));
+
+// Delete file
+unlink($path);
+
+// Copy file overwriting destination
+copy($from, $to);
+
+// - Rename file overwriting destination
+// - Rename dir, fails if destination exists
+rename($from, $to);
+
+// Create directory recursively
+// (permissions a ignored on Windows)
+mkdir($dir, 0777, true);
+
+// Remove an empty directory
+rmdir($dir);
+```
+
+Iterate all files:
+
+```php
+$di = new DirectoryIterator($dir);
+foreach ($di as $fi) {
+    if ($fi->isFile()) {
+        echo $fi->getFilename() . "\n";
+        echo "  ext:      " . $fi->getExtension() . "\n";
+        echo "  dir:      " . $fi->getPath() . "\n";
+        echo "  path:     " . $fi->getPathname() . "\n";
+        echo "  realpath: " . $fi->getRealPath() . "\n";
+        echo "  size:     " . $fi->getSize() . " bytes\n";
+    }
+}
+```
+
+Recursively iterate all files:
+
+```php
+$rii = new RecursiveIteratorIterator(
+    new RecursiveDirectoryIterator(
+        $dir, 
+        RecursiveDirectoryIterator::SKIP_DOTS
+    )
+);
+foreach ($rii as $fi) {
+    echo $fi->getFilename() . "\n";
+    echo "  ext:      " . $fi->getExtension() . "\n";
+    echo "  dir:      " . $fi->getPath() . "\n";
+    echo "  path:     " . $fi->getPathname() . "\n";
+    echo "  realpath: " . $fi->getRealPath() . "\n";
+    echo "  size:     " . $fi->getSize() . " bytes\n";
+}
 ```
 
 ### Terminal
