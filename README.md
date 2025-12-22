@@ -82,7 +82,6 @@ This document is a reference guide for PHP programming. It is a bit more than a 
   - [Exit process](#exit-process)
   - [Environment variables](#environment-variables)
   - [File operations](#file-operations)
-  - [Terminal](#terminal)
   - [Processes](#processes)
 
 
@@ -209,6 +208,9 @@ String concat:    . .=
 ```php
 echo "Hello", "World!", "\n";
 echo "Hello" . "World!" . "\n";
+
+// Can use ANSI escape codes
+echo "\033[31mRED\033[0m\n";
 ```
 
 ### Format string
@@ -1194,39 +1196,33 @@ foreach ($rii as $fi) {
 }
 ```
 
-### Terminal
-
-```py
-# ANSI escapes
-print('\033[31mRED\033[0m')
-line, col = 15, 10
-print(f'\033[{line};{col}HFind Me!')
-
-import os
-term_size = os.get_terminal_size()
-print(term_size.columns, term_size.lines)
-```
-
 ### Processes
 
-```py
-import subprocess as sp
-proc = sp.run(['ls', '-lh']) # blocks until done
-if proc.returncode != 0:
-    do_something_else()
+```php
+// Execute a command and when done 
+// return last output line
+echo exec('whoami') . "\n";
 
-# with statement closes file after nested block
-with open('./foo', 'w') as foofile:
-    sp.run(['ls'], stdout=foofile)
-with open('foo') as foofile:
-    sp.run(['tr', 'a-z', 'A-Z'], stdin=foofile)
-with open('foo.log', 'w') as logfile:
-    sp.run(['ls', 'foo', 'bar'], stderr=logfile)
+// Execute a command and return
+// all output lines in an array
+$out = null;
+$ret = null;
+exec('dir', $out, $ret);
+echo "Exit code is $ret and output:\n";
+print_r($out);
 
-import psutil
-p = psutil.Process(pid)
-p.kill()
-for proc in psutil.process_iter():
-    if proc.name() == 'my_proc':
-        proc.kill()
+// Create process with a read pipe
+$h = popen('dir', 'r'); // 'r' or 'rb'
+while (($line = fgets($h)) !== false)
+    echo $line;
+pclose($h);
+
+// Create a process with a write pipe
+$h = popen('sort', 'w'); // 'w' or 'wb'
+if ($h) {
+    fwrite($h, "Line2\nLine1\n");
+    pclose($h);
+}
 ```
+- On Windows, `popen()` defaults to text mode which will translate between `\n` and `\r\n`. To prevent that, enforce binary mode by appending a `b`. 
+- For bi-directional pipe support use `proc_open()`.
