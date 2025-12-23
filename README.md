@@ -52,6 +52,7 @@ This document is a reference guide for PHP programming. It is a bit more than a 
   - [foreach](#foreach)
     - [Indexed array](#indexed-array)
     - [Key-value array](#key-value-array)
+    - [Update elements](#update-elements)
     - [Object properties](#object-properties)
 - [Functions](#functions)
 - [Classes](#classes)
@@ -550,6 +551,27 @@ $arr = ["name" => "foo",
         "email" => "foo@bar.com"];
 foreach ($arr as $key => $val) { 
     echo "$key => $val\n";
+}
+```
+
+#### Update elements
+
+```php
+$arr = [1, 2, 3];
+foreach ($arr as &$val) {
+    $val = $val ** 2;
+}
+// Break reference with last element,
+// otherwise $val = 0 changes $arr[2] 
+unset($val);
+```
+
+To avoid the reference problem to the last element, just use:
+
+```php
+$arr = [1, 2, 3];
+foreach ($arr as $key => $val) {
+    $arr[$key] = $val ** 2;
 }
 ```
 
