@@ -319,6 +319,17 @@ $arr = ['key1' => 'val1', 'key2' => 'val2'];
 echo $arr['key1'];
 ```
 
+No need to declare an array:
+
+```php
+$arr1[0] = 1;
+$arr1[1] = 2;
+$arr1[2] = 3;
+
+$arr2['key1'] = 'val1';
+$arr2['key2'] = 'val2';
+```
+
 ### Multidimensional
 
 Multidimensional arrays are simply arrays which have other arrays as elements.
