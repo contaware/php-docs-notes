@@ -162,8 +162,6 @@ There is only one value of type `null`, and that is the case-insensitive constan
 
 The `int` data type is always signed, and its size depends from the platform (32-bit vs 64-bit), see the `PHP_INT_SIZE`, `PHP_INT_MAX` and `PHP_INT_MIN` constants. In PHP there is no difference between `float` and `double`, in fact `double` is an alias of `float`. There are the `PHP_FLOAT_MIN` and `PHP_FLOAT_MAX` constants.
 
-The `resource` data type holds a reference to an external resource, such as a database connection or a file handler.
-
 ```php
 $my_null = null;  // null
 $my_bool = true;  // true/false
@@ -175,6 +173,14 @@ $num = 3.1415;    // float
 $num = (int)$num; // cast to int
 ```
 - Use `var_dump()` or `print_r()` to view the variable details.
+
+The `resource` data type holds a reference to an external resource, such as a database connection or a [file handler](#read-file).
+
+The following data types are explained in their own sections:
+
+- [Strings](#strings) (`string`)
+- [Arrays](#arrays) (`array`)
+- [Classes](#classes) (`object`)
 
 ### Passing by value or reference
 
