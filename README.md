@@ -16,7 +16,7 @@ This document is a reference guide for PHP programming. It is a bit more than a 
 - [Variables and Constants](#variables-and-constants)
   - [Introduction](#introduction)
   - [Data types](#data-types)
-  - [Passing by value or reference](#passing-by-value-or-reference)
+  - [Reference assignment](#reference-assignment)
 - [Operators](#operators)
 - [echo, format, input](#echo-format-input)
   - [echo](#echo)
@@ -30,6 +30,7 @@ This document is a reference guide for PHP programming. It is a bit more than a 
 - [Arrays](#arrays)
   - [Onedimensional](#onedimensional)
   - [Multidimensional](#multidimensional)
+  - [References](#references)
   - [Common functions](#common-functions-1)
   - [Add element](#add-element)
   - [Remove element](#remove-element)
@@ -55,6 +56,12 @@ This document is a reference guide for PHP programming. It is a bit more than a 
     - [Update elements](#update-elements)
     - [Object properties](#object-properties)
 - [Functions](#functions)
+  - [Basic functions](#basic-functions)
+  - [Varargs functions](#varargs-functions)
+  - [Pass/return by reference](#passreturn-by-reference)
+  - [Anonymous functions](#anonymous-functions)
+  - [Closures](#closures)
+  - [Arrow functions](#arrow-functions)
 - [Classes](#classes)
   - [Basics](#basics)
   - [Inheritance](#inheritance)
@@ -183,11 +190,31 @@ The following data types are explained in their own sections:
 - [Arrays](#arrays) (`array`)
 - [Classes](#classes) (`object`)
 
-### Passing by value or reference
+### Reference assignment
 
-- *For non-object data types including arrays*: function arguments are **passed-by-value**. To **pass-by-reference** prepend an `&` to the argument name in the function definition. Variable assignments involve **value copying**. Use the reference operator to **copy-by-reference**, for example `$var2 = &$var1`. Functions do also **return-by-value**. To have a function **return-by-reference**, prepend the function declaration name with an `&` and when assigning the return value to a variable, you probably want an assignment-by-reference with another `&`.
+References in PHP are a means to access the **same variable content by different names**. They are not comparable to C-style pointers/references, they behave more like hardlinks in Unix filesystems. When talking about references, we often hear the term **bind** too. This is because references that refer to the same content are bound together.
 
-- *For object data types*: an object variable doesn't contain the object itself as value. It only contains an object identifier which follows the rules for non-object data-types; from that it follows that **objects are passed-by-references**.
+```php
+// Multiple references
+$ref1 = 'foo';  // see it as the first reference
+$ref2 = &$ref1;
+$ref3 = &$ref2; // same as: $ref3 = &$ref1
+echo "$ref1, $ref2, $ref3\n";
+unset($ref1);   // remove this reference
+$ref3 = 'bar';
+echo "$ref2, $ref3\n";
+
+// Type-change does not unbind
+$mix = 'foo';
+$mix2 = &$mix;
+$mix = 9;
+var_dump($mix2);
+
+// Bind before assignment
+$b = &$a;
+xdebug_debug_zval('a'); // see refcount
+xdebug_debug_zval('b'); // see refcount
+```
 
 
 ## Operators
@@ -340,6 +367,33 @@ $arr = [
     'arr2' => [4, 5, 6]
 ];
 echo $arr['arr1'][0];
+```
+
+### References
+
+```php
+// Reference assignment
+$arr = [1, 2];
+$arr2 = &$arr;
+$arr2[0] = 3;
+$arr2[1] = 4;
+print_r($arr);
+
+// Bind array elements
+$arr = [&$a, &$b];
+// or
+$a = &$arr[0];
+$b = &$arr[1];
+
+// Copying an array which has referenced elements
+// - non-referenced elements are copied by value
+// - referenced elements are copied by reference
+$arr = [1, 2];
+$ref = &$arr[0]; // referenced element
+$arr2 = $arr;
+$arr2[0] = 3;
+$arr2[1] = 4;
+print_r($arr); // [3, 2]
 ```
 
 ### Common functions
@@ -603,7 +657,10 @@ foreach ($obj as $prop => $val) {
 
 ## Functions
 
-The passed number of arguments must much the function definition, except for the default arguments which are optional:
+### Basic functions
+
+- For **non-object data types, including arrays,** function arguments are **passed-by-value** and function variables are **returned-by-value**.
+- Conversely, **objects are passed and returned by reference** because the object variables are just identifiers which point to the actual objects.
 
 ```php
 function my_calc($x, $y) {
@@ -625,6 +682,9 @@ function default_arg($name = "everybody") {
 }
 echo(default_arg());
 ```
+- The passed number of arguments must match the function definition, except for the default arguments which are optional.
+
+### Varargs functions
 
 **Varargs** are accessed by array:
 
@@ -641,7 +701,29 @@ function my_min(...$args) {
 echo(my_min(4, 5, 6, 7, 2));
 ```
 
-**Anonymous functions**:
+### Pass/return by reference
+
+```php
+// Pass by reference
+function inc(&$var) {
+    $var++;
+}
+
+// Return by reference
+function &getcounter() {
+    static $cnt = 0;
+    return $cnt;
+}
+
+inc(getcounter());
+echo getcounter() . "\n";
+
+$count = &getcounter();
+$count++;
+echo getcounter() . "\n";
+```
+
+### Anonymous functions
 
 ```php
 // Assign to a variable
@@ -658,6 +740,8 @@ $squared = array_map(function($n) {
 print_r($squared);
 ```
 
+### Closures
+
 A **Closure** is a function that accesses variables from the enclosing scope, even after the outer functions are done. The used enclosing scope variables have to be listed comma separated through the `use` construct:
 
 ```php
@@ -671,6 +755,8 @@ echo($my_doubler(3));
 echo($my_tripler(3));
 ```
 - Hint: prepend a `&` to the variables listed in `use` to include them *by-reference* instead of *by-value*.
+
+### Arrow functions
 
 **Arrow functions** are a more concise syntax for anonymous functions. The variables from the enclosing scope are automatically included *by-value*:
 
