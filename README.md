@@ -665,13 +665,22 @@ foreach ($obj as $prop => $val) {
 
 ```php
 function my_calc($x, $y) {
-    global $num;      // make $num global
-    $num = 3;
-    $z = 2 * $x + $y; // $z is local to function
+    // $num is global
+    global $num;
+    $num++;
+
+    // Global with local scope
+    static $cnt = 0;
+    $cnt++;
+
+    // $z is local to the function
+    $z = 2 * $x + $y;
+
     return $z;
 }
-echo(my_calc(1, 2));        // positional args
-echo(my_calc(y: 2, x: 1));  // named args
+$num = 0;
+echo my_calc(1, 2) . "\n"; // positional args
+echo my_calc(y: 2, x: 1) . "\n"; // named args
 
 function default_return() {
     $a = 1 + 1;
