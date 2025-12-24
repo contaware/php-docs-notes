@@ -66,6 +66,7 @@ This document is a reference guide for PHP programming. It is a bit more than a 
   - [Basics](#basics)
   - [Inheritance](#inheritance)
   - [Interfaces](#interfaces)
+  - [Copy and Clone](#copy-and-clone)
 - [Include PHP files](#include-php-files)
   - [include and require](#include-and-require)
   - [Useful constants and variables](#useful-constants-and-variables)
@@ -846,6 +847,26 @@ class C implements I {
 }
 $obj = new C();
 $obj->method();
+```
+
+### Copy and Clone
+
+An object variable doesn't contain the object itself as value. It only contains an object identifier that points to the actual object. To **copy** the content of an object we have to **clone** it.
+
+The `clone` keyword will perform a **shallow copy** of all of the object's properties. Any properties that are references to other variables will remain references. `__construct()` is never called for the new object, but once the cloning is complete, if a `__clone()` method is defined, then the newly created object's `__clone()` method will be called to allow updating the properties and make a **deep copy**. 
+
+A child class inherits the parent's `__clone()` method if it does not implement it. The `__clone()` method in a child class must explicitly call `parent::__clone()`.
+
+```php
+$obj2 = clone $obj;
+
+class C {
+    public $prop;
+    public function __clone() {
+        // For properties that are objects
+        $this->prop = clone $this->prop;
+    }
+}
 ```
 
 
