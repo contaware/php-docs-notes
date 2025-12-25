@@ -690,7 +690,7 @@ var_dump(default_return()); // returns null
 function default_arg($name = "everybody") {
     return "Hello $name!\n";
 }
-echo(default_arg());
+echo default_arg();
 ```
 - The passed number of arguments must match the function definition, except for the default arguments which are optional.
 
@@ -708,7 +708,7 @@ function my_min(...$args) {
     }
     return $result;
 }
-echo(my_min(4, 5, 6, 7, 2));
+echo my_min(4, 5, 6, 7, 2);
 ```
 
 ### Pass/return by reference
@@ -761,8 +761,8 @@ function my_func($n) {
 
 $my_doubler = my_func(2);
 $my_tripler = my_func(3);
-echo($my_doubler(3));
-echo($my_tripler(3));
+echo $my_doubler(3);
+echo $my_tripler(3);
 ```
 - Hint: prepend a `&` to the variables listed in `use` to include them *by-reference* instead of *by-value*.
 
@@ -778,8 +778,8 @@ function my_func($n) {
 
 $my_doubler = my_func(2);
 $my_tripler = my_func(3);
-echo($my_doubler(3));
-echo($my_tripler(3));
+echo $my_doubler(3);
+echo $my_tripler(3);
 ```
 
 
