@@ -38,6 +38,7 @@ This document is a reference guide for PHP programming. It is a bit more than a 
   - [In-place sort](#in-place-sort)
   - [Slice](#slice)
   - [Merge](#merge)
+  - [Destructure (or unpack)](#destructure-or-unpack)
 - [Conditions](#conditions)
   - [Truthy and Falsy](#truthy-and-falsy)
   - [Loose and Strict comparison](#loose-and-strict-comparison)
@@ -53,6 +54,7 @@ This document is a reference guide for PHP programming. It is a bit more than a 
   - [foreach](#foreach)
     - [Indexed array](#indexed-array)
     - [Key-value array](#key-value-array)
+    - [Multidimensional array](#multidimensional-array)
     - [Update elements](#update-elements)
     - [Object properties](#object-properties)
 - [Functions](#functions)
@@ -482,6 +484,32 @@ $arr = [...$a, 5, ...$b];
 $arr = ['key' => 'val', ...$a, ...$b];
 ```
 
+### Destructure (or unpack)
+
+```php
+// - $arr must start at index 0
+// - $arr is same size (or bigger)
+$arr = [1, 2, 3, 4];
+list($a, $b, $c) = $arr;
+[$a, $b, $c] = $arr; // short syntax
+echo "$a, $b, $c\n";
+
+// Ignore element(s)
+[, $b, $c] = $arr;
+echo "$b, $c\n";
+
+// Swap variables
+[$b, $a] = [$a, $b];
+echo "$a, $b\n";
+
+// Assign by key
+$arr = ['key1' => 'val1', 
+        'key2' => 'val2', 
+        'key3' => 'val3'];
+['key3' => $c, 'key1' => $a] = $arr;
+echo "$a, $c\n";
+```
+
 
 ## Conditions
 
@@ -617,6 +645,28 @@ $arr = ["name" => "foo",
         "email" => "foo@bar.com"];
 foreach ($arr as $key => $val) { 
     echo "$key => $val\n";
+}
+```
+
+#### Multidimensional array
+
+To loop over a multidimensional array it's possible to use [array destructuring](#destructure-or-unpack):
+
+```php
+$arr = [
+    [1, 2],
+    [3, 4]
+];
+foreach ($arr as [$a, $b]) {
+    echo "$a, $b\n";
+}
+
+$arr = [
+    ['name' => 'Leo', 'id' => 1],
+    ['name' => 'Zoe', 'id' => 2]
+];
+foreach ($arr as ['id' => $id, 'name' => $name]) {
+    echo "$id, $name\n";
 }
 ```
 
