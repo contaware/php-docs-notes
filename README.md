@@ -7,11 +7,17 @@ This document is a reference guide for PHP programming. It is a bit more than a 
 
 - [Install](#install)
   - [CLI vs Web Server](#cli-vs-web-server)
-  - [Check](#check)
   - [Linux](#linux)
   - [macOS](#macos)
   - [Windows](#windows)
 - [Shebang line](#shebang-line)
+- [Command line options](#command-line-options)
+  - [Parse and execute given file](#parse-and-execute-given-file)
+  - [Show information](#show-information)
+  - [Run PHP from command line argument](#run-php-from-command-line-argument)
+  - [Start interactive shell](#start-interactive-shell)
+  - [Syntax check (lint)](#syntax-check-lint)
+  - [Start built-in web server](#start-built-in-web-server)
 - [Syntax](#syntax)
 - [Variables and Constants](#variables-and-constants)
   - [Introduction](#introduction)
@@ -102,14 +108,6 @@ This document is a reference guide for PHP programming. It is a bit more than a 
 
 PHP can be run through a web server or from the command line. To run it through a web server on your local machine install a LAMP (Linux Apache MySQL PHP), MAMP (Mac Apache MySQL PHP) or a WAMP (Windows Apache MySQL PHP). To use it as command line interpreter follow the next sections.
 
-### Check
-
-To see whether PHP is already installed, in your terminal run:
-
-```
-php -v
-```
-
 ### Linux
 
 To install on Debian/Ubuntu:
@@ -138,6 +136,73 @@ Under Linux/macOS to be able to execute a PHP script without invoking it through
 ```bash
 #!/usr/bin/env php
 ```
+
+## Command line options
+
+### Parse and execute given file
+
+```bash
+php script.php
+```
+- `-f` is the option to execute the script. As it is optional, we usually do not provide it.
+- With the `-c` option we can supply a specific `php.ini` file.
+
+### Show information
+
+```bash
+# Help
+php -h
+
+# PHP version
+php -v
+
+# PHP configuration
+php -i
+
+# Installed modules/extensions
+php -m
+```
+
+### Run PHP from command line argument
+
+**Do not provide** the PHP start and end  tags (`<?php` and `?>`).
+
+On Linux/macOS, to use double-quotes within the PHP code, supply the PHP code line in single-quotes:
+
+```bash
+php -r 'echo "Hello World!\n";'
+```
+
+On Windows, double-quotes within the PHP code must be backslash escaped:
+
+```bat
+php -r "echo \"Hello World!\n\";"
+```
+
+### Start interactive shell
+
+```bash
+php -a
+
+# Type code and press ENTER
+echo "Hi\n";
+```
+- Type `quit` or `exit` to return to your terminal.
+
+### Syntax check (lint)
+
+```bash
+php -l script.php
+```
+- Note: it does not execute the given PHP code. 
+
+### Start built-in web server
+
+```bash
+php -S localhost:8000
+```
+- Press `Ctrl-C` to quit.
+- By default, it serves files from the current directory. The `-t` option can be used to specify a document root.
 
 
 ## Syntax
