@@ -32,6 +32,7 @@ This document is a reference guide for PHP programming. It is a bit more than a 
   - [Single vs Double quotes](#single-vs-double-quotes)
   - [Multi-line strings](#multi-line-strings)
   - [Common functions](#common-functions)
+  - [UTF-8](#utf-8)
   - [Regular expression](#regular-expression)
 - [Arrays](#arrays)
   - [Onedimensional](#onedimensional)
@@ -114,7 +115,7 @@ PHP can be run through a web server or from the command line. To run it through 
 To install on Debian/Ubuntu:
 
 ```
-sudo apt install php-cli
+sudo apt install php-cli php-mbstring
 ```
 
 ### macOS
@@ -127,8 +128,12 @@ brew install php
 
 ### Windows
 
-For Windows [download](https://windows.php.net/download/) the Non-Thread-Safe (NTS)package and unzip it to like `C:\php`. Now add the chosen folder to your `PATH`. Copy `php.ini-development` to `php.ini`.
+For Windows [download](https://windows.php.net/download/) the Non-Thread-Safe (NTS) package and unzip it to like `C:\php`. Now add the chosen folder to your `PATH`. Copy `php.ini-development` to `php.ini` and verify that:
 
+```ini
+extension = mbstring
+default_charset = "UTF-8"
+```
 
 ## Shebang line
 
@@ -360,23 +365,67 @@ echo $multiline2 . "\n";
 ```php
 $s = strtoupper($s);
 $s = strtolower($s);
-$len = strlen($s);
+$len = strlen($s); // always counts bytes
 $s = trim($s);  // trim whitespaces
 $s = ltrim($s); // trim left whitespaces
 $s = rtrim($s); // trim right whitespaces
 $pos = strpos($s, $substr);  // false if not found
 $pos = strrpos($s, $substr); // false if not found
 $s = substr($s, $start, $len);
+$arr = str_split($s);
 $arr = explode($sep, $s);    // $sep is a string
 $s = implode($sep, $arr);    // $sep is a string
 $s = str_replace($search, $repl, $s); // replace all
+```
+
+Loop over an ASCII string:
+
+```php
+$s = "Hi !\n";
+for ($i = 0; $i < strlen($s); $i++) {
+    $code = ord($s[$i]);
+    if ($code < 0x20)
+        echo "0x" . dechex($code) . "\n";
+    else
+        echo "$s[$i] (0x" . dechex($code) . ")\n";
+}
+```
+
+### UTF-8
+
+In PHP, all **common string functions work on bytes**, not on characters. If your string contains non-ASCII characters, you must use the `mb_*` functions, since two or more consecutive bytes may represent a single character. 
+
+To make sure that the correct encoding is used, either call `mb_internal_encoding('UTF-8')` on top of every script, or invoke all `mb_*` functions with the `'UTF-8'` encoding parameter. To check the current internal encoding, issue `echo mb_internal_encoding()`.
+
+Output Unicode code point as UTF-8:
+
+```php
+// mb_chr() function
+echo mb_chr(0x1F418, 'UTF-8') . "\n";
+
+// Unicode codepoint escape syntax
+echo "\u{1F418}\n"; // outputs UTF-8
+```
+- Note: if your PHP source file is UTF-8 encoded, you can embed the unicode symbol directly.
+
+Loop over an UTF-8 string:
+
+```php
+$s = "EU€ 😀\n";
+foreach (mb_str_split($s, 1, 'UTF-8') as $c) {
+    $code = mb_ord($c, 'UTF-8');
+    if ($code < 0x20)
+        echo "0x" . dechex($code) . "\n";
+    else
+        echo "$c (0x" . dechex($code) . ")\n";
+}
 ```
 
 ### Regular expression
 
 ```php
 // The PCRE regex
-$pattern = '/../ims'; // use single-quotes
+$pattern = '/../imsu'; // use single-quotes
 
 // Search $pattern, $matches is optional,
 // returns 1 on match, otherwise 0
@@ -395,6 +444,7 @@ $s = preg_replace($pattern, $replacement, $s);
 - The `i` flag means to ignore the case.
 - The `m` flag specifies a multiline match. If it is used, `^` and `$` change from matching at only the start or end of the entire string to the start or end of any line within the string. 
 - The `s` flag makes the dot also match line breaks.
+- The `u` flag activates support for UTF-8.
 
 
 ## Arrays
