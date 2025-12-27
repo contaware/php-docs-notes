@@ -50,6 +50,7 @@ This document is a reference guide for PHP programming. It is a bit more than a 
   - [Loose and Strict comparison](#loose-and-strict-comparison)
   - [if](#if)
   - [Ternary operator](#ternary-operator)
+  - [Spaceship operator](#spaceship-operator)
   - [switch-case](#switch-case)
   - [try-except](#try-except)
     - [Introduction](#introduction-1)
@@ -288,16 +289,17 @@ xdebug_debug_zval('b'); // see refcount
 ## Operators
 
 ```
-Assign:           = += -= *= /= **= %=
-Pre inc/dec:      ++$x --$x
-Post inc/dec:     $x++ $x--
-Math:             + - * / %
-Exponentiation:   **
-Comparison:       < <= > >= == != === !==
-Boolean:          && || !
-Bitwise:          ~ | & ^
-Shift:            << >>
-String concat:    . .=
+Assign:            = += -= *= /= %= **=
+Pre inc/dec:       ++$x --$x
+Post inc/dec:      $x++ $x--
+Math:              + - * / %
+Exponentiation:    **
+Loose comparison:  < <= > >= == != 
+Strict comparison: === !==
+Boolean:           && || !
+Bitwise:           ~ | & ^
+Shift:             << >>
+String concat:     . .=
 ```
 - The division operator `/` performs a floating-point division, but it returns an `int` when the two operands are `int` and the result is an integer number.
 - Operands of the modulo operator `%` are converted to `int` before processing.
@@ -613,6 +615,17 @@ If `condition` is `true`, `$res` is `val1`, otherwise it is `val2`:
 ```php
 $res = condition ? val1 : val2;
 ```
+
+### Spaceship operator
+
+Returns -1, 0 or 1 when first expression is respectively less than, equal to, or greater than second expression:
+
+```php
+// $res: -101
+//        |||
+$res = $a <=> $b;
+```
+Note: it does loose comparisons.
 
 ### switch-case
 
