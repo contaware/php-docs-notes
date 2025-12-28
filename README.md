@@ -85,11 +85,15 @@ This document is a reference guide for PHP programming. It is a bit more than a 
   - [Use](#use)
   - [Manage](#manage)
   - [Examples of packages](#examples-of-packages)
-- [Built-in Functions and Classes](#built-in-functions-and-classes)
+- [Built-in tools](#built-in-tools)
   - [Math](#math)
   - [Random](#random)
   - [Time](#time)
   - [Date/Time](#datetime)
+  - [Web](#web)
+    - [Superglobals](#superglobals)
+    - [Send HTTP headers](#send-http-headers)
+    - [Data preparation](#data-preparation)
   - [JSON](#json)
   - [CSV](#csv)
   - [I/O and Processes](#io-and-processes)
@@ -1140,7 +1144,7 @@ Packages are installed via **Composer**.
 - Math: `markrogoyski/math-php`
 
 
-## Built-in Functions and Classes
+## Built-in tools
 
 ### Math
 
@@ -1288,6 +1292,70 @@ if ($now < $now_add)
 $now_ts = $now->getTimestamp();    // integer sec
 $now_approx = new DateTimeImmutable('@' . $now_ts);
 var_dump($now_approx->diff($now)); // diff in $f
+```
+
+### Web
+
+#### Superglobals
+
+- `$_GET` contains query parameters passed in via a **GET request**. The values in `$_GET` are already url-decoded, no need to call `urldecode()`.
+- `$_POST` contains post parameters passed in via a **POST request**. The values in `$_POST` are already decoded according to the Content-Type. The supported Content-Type are: `application/x-www-form-urlencoded` and `multipart/form-data`.
+- `$_SESSION` contains session variables which persist across multiple pages for the duration of the user's session. Call `session_start()` on every page you wish to use `$_SESSION`.
+- `$_SERVER['REQUEST_METHOD']` returns the HTTP method as a string: "GET", "POST", "PUT", "DELETE". 
+- `$_SERVER['REQUEST_URI']` returns exactly what is entered in the URL (without protocol, host and port). The query values are url-encoded.
+- `$_SERVER['PATH_INFO']` contains any client-provided path information trailing the actual script name but preceding the QUERY_STRING.
+- `$_SERVER['QUERY_STRING']` contains `name=value` pairs separated by `&`. The query values are url-encoded.
+- `$_SERVER['SCRIPT_NAME']` returns the path of the currently executing script, relative to the document root. It is without trailing PATH_INFO and without trailing QUERY_STRING.
+- `$_SERVER['PHP_SELF']` behaves similarly to `$_SERVER['SCRIPT_NAME']`, except that it also returns the trailing PATH_INFO.
+- `$_SERVER` variables that return an absolute path are [covered here](#useful-constants-and-variables).
+  
+#### Send HTTP headers
+
+`header($header, $replace = true, $response_code = 0)` must be called before any actual output is sent, whether from HTML tags, blank lines in a file, or a PHP file. The optional `replace` parameter indicates whether the header should replace a previous similar header, or add another header of the same type. When the passed header starts with `HTTP/`, the response code is derived from it. When using the `Location` header, the default response code is 302, but other response codes can be provided. 
+
+```php
+// Page not found
+header($_SERVER['SERVER_PROTOCOL'] . " 404 Not Found");
+
+// Redirect with 302 Found (moved temporarily)
+header("Location: /script.php");
+exit;
+
+// Redirect with 301 Moved Permanently
+header("Location: /script.php", true, 301);
+exit;
+
+// Prevent any form of caching
+// Compatible with HTTP/1.1:
+header("Cache-Control: no-store");
+// Compatible with HTTP/1.0:
+header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
+```
+
+#### Data preparation
+
+In HTML, an attribute value can remain unquoted if it doesn't contain ASCII whitespaces or any of ``" ' ` = < >``. Otherwise, it has to be quoted using either single-quotes or double-quotes. The value, along with the `=` character, can be omitted altogether if the value is the empty string. Within a double-quoted attribute value, it's necessary to entity encode `"` (usually to `&quot;`) and within a single-quoted attribute value, it's necessary to entity encode `'` (usually to `&#039;`).
+
+PHP has functions performing entity encoding and percent encoding:
+
+- `htmlspecialchars($s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')` entity encodes `& " ' < >` to `&amp; &quot; &#039; &lt; &gt;`.
+- `htmlentities($s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')` entity encodes all applicable characters.
+- `urlencode()` encodes a string by replacing special characters with their hexadecimal representation preceded by a `%`. This function is used to prepare query string values. Note that the browser performs the same encoding for posted form data when the `enctype` attribute is set to `application/x-www-form-urlencoded`.
+- `urldecode()` decodes an URL-encoded string, converting hexadecimal representations of special characters back to their original characters.
+
+```php
+$foo = 'data +';
+$query = 'foo=' . urlencode($foo);
+echo '<a href="script.php?', $query, '">click</a>', "\n";
+
+$bar = 'other&1';
+$query = 'foo=' . urlencode($foo) . '&bar=' . urlencode($bar);
+$query = htmlspecialchars($query, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+echo '<a href="script.php?', $query, '">click</a>', "\n";
+
+$comment = $_POST['comment'];
+$comment = htmlspecialchars($comment, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+echo "<p>$comment</p>\n";
 ```
 
 ### JSON
