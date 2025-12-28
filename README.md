@@ -346,7 +346,19 @@ printf('Your number+1 is %d', (int)$n+1);
 
 ### Single vs Double quotes
 
-**Single-quoted** strings are almost not interpreted, except for `'\\'` and `'\''`. **Double-quoted** strings support escape sequences like `"\n"` and many more, and variables are evaluated. Delimit a variable name with curly braces, for example `"{$foo}bar"`.
+**Single-quoted** strings are almost not interpreted, except for `'\\'` and `'\''`. **Double-quoted** strings support escape sequences like `"\n"` and many more, and variables are evaluated. 
+
+In double-quotes, delimit a variable name or use an associative array with **curly braces**:
+
+```php
+$foobar = 'foobar';
+$foo = 'foo';
+echo "$foobar\n";
+echo "{$foo}bar\n";
+
+$arr = ['key' => 'val'];
+echo "{$arr['key']}\n";
+```
 
 ### Multi-line strings
 
