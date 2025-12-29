@@ -210,10 +210,11 @@ php -l script.php
 ### Start built-in web server
 
 ```bash
-php -S localhost:8000
+php -S localhost:8888
 ```
 - Press `Ctrl-C` to quit.
 - By default, it serves files from the current directory. The `-t` option can be used to specify a document root.
+- This web server allows only one request at the time.
 
 
 ## Syntax
