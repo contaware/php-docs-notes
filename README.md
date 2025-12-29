@@ -1322,7 +1322,7 @@ var_dump(password_verify($pw, $hash));
 - `$_POST` contains post parameters passed in via a **POST request**. The values in `$_POST` are already decoded according to the Content-Type. The supported Content-Type are: `application/x-www-form-urlencoded` and `multipart/form-data`.
 - `$_SESSION` contains session variables which persist across multiple pages for the duration of the user's session. Call `session_start()` on every page you wish to use `$_SESSION`.
 - `$_SERVER['REQUEST_METHOD']` returns the HTTP method as a string: "GET", "POST", "PUT", "DELETE". 
-- `$_SERVER['REQUEST_URI']` returns exactly what is entered in the URL (without protocol, host and port). The query values are still url-encoded.
+- `$_SERVER['REQUEST_URI']` returns exactly what is entered in the URL (without scheme, host and port). The query values are still url-encoded.
 - `$_SERVER['PATH_INFO']` contains any client-provided path information trailing the actual script name but preceding the QUERY_STRING.
 - `$_SERVER['QUERY_STRING']` contains `name=value` pairs separated by `&`. The query values are still url-encoded.
 - `$_SERVER['SCRIPT_NAME']` returns the path of the currently executing script, relative to the document root. It is without trailing PATH_INFO and without trailing QUERY_STRING.
