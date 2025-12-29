@@ -93,6 +93,7 @@ This document is a reference guide for PHP programming. It is a bit more than a 
   - [Hash](#hash)
   - [Web](#web)
     - [Superglobals](#superglobals)
+    - [URL](#url)
     - [Send HTTP headers](#send-http-headers)
     - [Data preparation](#data-preparation)
   - [JSON](#json)
@@ -1321,12 +1322,27 @@ var_dump(password_verify($pw, $hash));
 - `$_POST` contains post parameters passed in via a **POST request**. The values in `$_POST` are already decoded according to the Content-Type. The supported Content-Type are: `application/x-www-form-urlencoded` and `multipart/form-data`.
 - `$_SESSION` contains session variables which persist across multiple pages for the duration of the user's session. Call `session_start()` on every page you wish to use `$_SESSION`.
 - `$_SERVER['REQUEST_METHOD']` returns the HTTP method as a string: "GET", "POST", "PUT", "DELETE". 
-- `$_SERVER['REQUEST_URI']` returns exactly what is entered in the URL (without protocol, host and port). The query values are url-encoded.
+- `$_SERVER['REQUEST_URI']` returns exactly what is entered in the URL (without protocol, host and port). The query values are still url-encoded.
 - `$_SERVER['PATH_INFO']` contains any client-provided path information trailing the actual script name but preceding the QUERY_STRING.
-- `$_SERVER['QUERY_STRING']` contains `name=value` pairs separated by `&`. The query values are url-encoded.
+- `$_SERVER['QUERY_STRING']` contains `name=value` pairs separated by `&`. The query values are still url-encoded.
 - `$_SERVER['SCRIPT_NAME']` returns the path of the currently executing script, relative to the document root. It is without trailing PATH_INFO and without trailing QUERY_STRING.
 - `$_SERVER['PHP_SELF']` behaves similarly to `$_SERVER['SCRIPT_NAME']`, except that it also returns the trailing PATH_INFO.
 - `$_SERVER` variables that return an absolute path are [covered here](#useful-constants-and-variables).
+
+#### URL
+
+```php
+// Split url in all parts
+$url = 'https://username:password@localhost:80/dir/script.php/path/info?foo1=bar%201&foo2=bar%202#anchor';
+print_r(parse_url($url));
+// or the single parts with PHP_URL_* 
+var_dump(parse_url($url, PHP_URL_PORT));
+
+// Split query string
+parse_str(parse_url($url, PHP_URL_QUERY), $params);
+print_r($params);
+```
+- `parse_str()` always decodes URL-encoded values.
   
 #### Send HTTP headers
 
