@@ -136,6 +136,7 @@ brew install php
 For Windows [download](https://windows.php.net/download/) the Non-Thread-Safe (NTS) package and unzip it to like `C:\php`. Now add the chosen folder to your `PATH`. Copy `php.ini-development` to `php.ini` and verify that:
 
 ```ini
+extension=openssl
 extension = mbstring
 default_charset = "UTF-8"
 ```
@@ -1456,6 +1457,30 @@ var_dump($lines);
 ```
 - `file_get_contents()` is binary-safe, and it will return `false` on failure.
 - `file()` works well with unix and windows line-ending.
+
+Wrappers:
+
+```php
+$url = 'https://www.example.com/';
+echo file_get_contents($url);
+var_dump(http_get_last_response_headers());
+
+// Timeout and self-signed certificates
+$ctx = stream_context_create([
+    'http' => [
+        'timeout' => 10, // seconds
+    ],
+    'ssl' => [
+        'verify_peer' => false,
+        'verify_peer_name' => false,
+        'allow_self_signed' => true,
+    ],
+]);
+echo file_get_contents($url, false, $ctx);
+```
+- `http://` and `https://` only support read access. 
+- `https://` needs the openssl extension to be enabled.
+- The `http` context options are for both `http://` and `https://`.
 
 #### Write file
 
