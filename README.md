@@ -212,10 +212,10 @@ php -l script.php
 ### Start built-in web server
 
 ```bash
-php -S localhost:8888
+php -S localhost:8888 -t ./html
 ```
 - Press `Ctrl-C` to quit.
-- By default, it serves files from the current directory. The `-t` option can be used to specify a document root.
+- By default, it serves files from the current directory. The `-t` option can be provided to specify a document root.
 - This web server allows only one request at the time.
 
 
@@ -1321,7 +1321,7 @@ var_dump(password_verify($pw, $hash));
 - `$_GET` contains query parameters passed in via a **GET request**. The values in `$_GET` are already url-decoded, no need to call `urldecode()`.
 - `$_POST` contains post parameters passed in via a **POST request**. The values in `$_POST` are already decoded according to the Content-Type. The supported Content-Type are: `application/x-www-form-urlencoded` and `multipart/form-data`.
 - `$_SESSION` contains session variables which persist across multiple pages for the duration of the user's session. Call `session_start()` on every page you wish to use `$_SESSION`.
-- `$_SERVER['REQUEST_METHOD']` returns the HTTP method as a string: "GET", "POST", "PUT", "DELETE". 
+- `$_SERVER['REQUEST_METHOD']` returns the HTTP method as a string: "GET", "POST", "PUT", "DELETE".
 - `$_SERVER['SERVER_PROTOCOL']` returns the protocol name and revision via which the page was requested: "HTTP/1.0", "HTTP/1.1".
 - `$_SERVER['REQUEST_URI']` returns exactly what is entered in the URL (without scheme, host and port). The query values are still url-encoded.
 - `$_SERVER['PATH_INFO']` contains any client-provided path information trailing the actual script name but preceding the QUERY_STRING.
@@ -1344,7 +1344,7 @@ parse_str(parse_url($url, PHP_URL_QUERY), $params);
 print_r($params);
 ```
 - `parse_str()` always decodes URL-encoded values.
-  
+
 #### Send HTTP headers
 
 `header($header, $replace = true, $response_code = 0)` must be called before any actual output is sent, whether from HTML tags, blank lines in a file, or a PHP file. The optional `replace` parameter indicates whether the header should replace a previous similar header, or add another header of the same type. When the passed header starts with `HTTP/`, the response code is derived from it. When using the `Location` header, the default response code is 302, but other response codes can be provided. 
