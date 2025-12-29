@@ -90,6 +90,7 @@ This document is a reference guide for PHP programming. It is a bit more than a 
   - [Random](#random)
   - [Time](#time)
   - [Date/Time](#datetime)
+  - [Hash](#hash)
   - [Web](#web)
     - [Superglobals](#superglobals)
     - [Send HTTP headers](#send-http-headers)
@@ -1293,6 +1294,22 @@ $now_ts = $now->getTimestamp();    // integer sec
 $now_approx = new DateTimeImmutable('@' . $now_ts);
 var_dump($now_approx->diff($now)); // diff in $f
 ```
+
+### Hash
+
+```php
+$pw = '1234';
+$hash = password_hash($pw, PASSWORD_DEFAULT);
+
+// Safely store $hash in your database
+
+// Check if it's the correct password
+var_dump(password_verify($pw, $hash));
+```
+- `password_hash()` already salts the passwords for you.
+- The used algorithm, cost and salt are returned as part of the hash. This allows `password_verify()` to automatically choose the correct algorithm.
+- Right now `PASSWORD_DEFAULT` uses the bcrypt algorithm which truncates passwords longer than 72 bytes and generates a 60 bytes long hash.
+- Stronger algorithms will become available over time, so storing the hash in a database column that can expand to 255 bytes is a good choice.
 
 ### Web
 
