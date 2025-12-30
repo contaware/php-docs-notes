@@ -247,8 +247,10 @@ A variable is global if it is used at the top level (outside any function defini
 
 ### Data types
 
+In PHP you don't need to declare the data type of a variable. It is automatically assigned based on the value. The following data types are supported:
+
 ```php
-null, bool, int, float, string, array, object, resource
+null, bool, int, float, string, array, object, callable, resource
 ```
 
 There is only one value of type `null`, and that is the case-insensitive constant `null`. Arrays accessed with an undefined key, undefined variables and variables passed to `unset()`, are all regarded as `null`, but testing them raises a warning. That warning can be avoided by using `isset()`, which checks whether a variable has been declared and is not `null`.
@@ -262,18 +264,18 @@ $num = 10;        // int
 $num = 012;       // octal
 $num = 0x0A;      // hexadecimal
 $num = 0b1010;    // binary
-$num = 3.1415;    // float
-$num = (int)$num; // cast to int
+$flt = 3.1415;    // float
+$num = (int)$flt; // cast to int
+$str = "Hi!\n";   // string
+$arr = [1, 2, 3]; // array
 ```
 - Use `var_dump()` or `print_r()` to view the variable details.
 
+The `object` data type holds an instance of a [class](#classes).
+
+The `callable` data type represents anything that can be called as a [function](#functions).
+
 The `resource` data type holds a reference to an external resource, such as a database connection or a [file handler](#read-file).
-
-The following data types are explained in their own sections:
-
-- [Strings](#strings) (`string`)
-- [Arrays](#arrays) (`array`)
-- [Classes](#classes) (`object`)
 
 ### Reference assignment
 
