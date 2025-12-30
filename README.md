@@ -24,13 +24,11 @@ This document is a reference guide for PHP programming. It is a bit more than a 
   - [Data types](#data-types)
   - [Reference assignment](#reference-assignment)
 - [Operators](#operators)
-- [echo, format, input](#echo-format-input)
-  - [echo](#echo)
-  - [Format string](#format-string)
-  - [Read input line](#read-input-line)
+- [echo](#echo)
 - [Strings](#strings)
   - [Single vs Double quotes](#single-vs-double-quotes)
   - [Multi-line strings](#multi-line-strings)
+  - [Format string](#format-string)
   - [Common functions](#common-functions)
   - [UTF-8](#utf-8)
   - [Regular expression](#regular-expression)
@@ -105,6 +103,7 @@ This document is a reference guide for PHP programming. It is a bit more than a 
     - [Binary and text mode](#binary-and-text-mode)
     - [Read file](#read-file)
     - [Write file](#write-file)
+    - [Read input line](#read-input-line)
     - [stdin stdout stderr](#stdin-stdout-stderr)
     - [File operations](#file-operations)
     - [Environment variables](#environment-variables)
@@ -323,11 +322,9 @@ String concat:     . .=
 - Operands of the modulo operator `%` are converted to `int` before processing.
 
 
-## echo, format, input
+## echo
 
-### echo
-
-`echo` is not a function but a language construct, it outputs one or more expressions separated by commas; no newlines or spaces are printed. 
+`echo` is not a function but a language construct, it outputs one or more expressions separated by commas; no newlines or spaces are printed:
 
 ```php
 echo "Hello", "World!", "\n";
@@ -335,23 +332,6 @@ echo "Hello" . "World!" . "\n";
 
 // Can use ANSI escape codes
 echo "\033[31mRED\033[0m\n";
-```
-
-### Format string
-
-```php
-$num = 3;
-$location = 'tree';
-$format = "There are %d monkeys in the %s\n";
-printf($format, $num, $location);
-echo sprintf($format, $num, $location);
-```
-
-### Read input line
-
-```php
-$n = readline('Enter a number: ');
-printf('Your number+1 is %d', (int)$n+1);
 ```
 
 
@@ -383,6 +363,16 @@ echo $multiline1 . "\n";
 $multiline2 = 'line1
 line2';
 echo $multiline2 . "\n";
+```
+
+### Format string
+
+```php
+$num = 3;
+$location = 'tree';
+$format = "There are %d monkeys in the %s\n";
+printf($format, $num, $location);
+echo sprintf($format, $num, $location);
 ```
 
 ### Common functions
@@ -1544,6 +1534,13 @@ file_put_contents('my_file.txt',
     FILE_APPEND);
 ```
 - `file_put_contents()` is binary-safe, and it will return `false` on failure.
+
+#### Read input line
+
+```php
+$n = readline('Enter a number: ');
+printf('Your number+1 is %d', (int)$n+1);
+```
 
 #### stdin stdout stderr
 
