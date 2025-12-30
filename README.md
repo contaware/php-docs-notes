@@ -81,6 +81,8 @@ This document is a reference guide for PHP programming. It is a bit more than a 
   - [include and require](#include-and-require)
   - [Useful constants and variables](#useful-constants-and-variables)
   - [Direct run check](#direct-run-check)
+    - [1. Compare `__FILE__` with `$_SERVER['SCRIPT_FILENAME']`](#1-compare-__file__-with-_serverscript_filename)
+    - [2. Test a constant defined in the main script](#2-test-a-constant-defined-in-the-main-script)
 - [Packages](#packages)
   - [Use](#use)
   - [Manage](#manage)
@@ -1103,7 +1105,9 @@ There are two important distinctions to consider when providing the file:
 
 ### Direct run check
 
-Compare `__FILE__` with `$_SERVER['SCRIPT_FILENAME']`:
+There are two possibilities to test whether a PHP script is running directly or has been included:
+
+#### 1. Compare `__FILE__` with `$_SERVER['SCRIPT_FILENAME']`
 
 ```php
 if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME']))
@@ -1113,7 +1117,7 @@ else
 ```
 - With `basename()` we account for possible differences in the directory separator, especially on Windows. But note that if the files have the same base name, we have to remove those `basename()` calls.
 
-Test a constant defined in the main script:
+#### 2. Test a constant defined in the main script
 
 ```php
 /* main.php */
