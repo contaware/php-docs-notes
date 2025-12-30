@@ -49,6 +49,7 @@ This document is a reference guide for PHP programming. It is a bit more than a 
 - [Conditions](#conditions)
   - [Truthy and Falsy](#truthy-and-falsy)
   - [Loose and Strict comparison](#loose-and-strict-comparison)
+  - [`empty()` function](#empty-function)
   - [if](#if)
   - [Ternary operator](#ternary-operator)
   - [Spaceship operator](#spaceship-operator)
@@ -665,7 +666,22 @@ The terms **truthy** and **falsy** refer to values that are not of type `bool` b
 - [Loose comparison](https://www.php.net/manual/types.comparisons.php#types.comparisions-loose): only the values are compared, if the variables have a different data type, then a type conversion happens before the comparison. The operators are `< <= > >= == !=`.
 
 - [Strict comparison](https://www.php.net/manual/types.comparisons.php#type.comparisons-strict): both data type and value must match. The operators are `=== !==`.
- 
+
+### `empty()` function
+
+The `empty()` function returns `true` if the variable passed as argument does not exist or if the argument equals `false` in a loose comparison:
+
+```php
+assert(empty($novar));
+assert(empty(false));
+assert(empty(null));
+assert(empty(0));
+assert(empty(0.0));
+assert(empty([]));
+assert(empty(''));
+assert(empty('0'));
+```
+
 ### if
 
 ```php
