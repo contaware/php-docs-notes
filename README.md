@@ -1024,7 +1024,8 @@ $obj1 = new C1("First");
 $obj1->info();
 ```
 - `__construct()` is the constructor method, only one per class.
-- `__destruct()` is the destructor method called when an object is destroyed with `unset($obj1)` or goes out of scope.
+- `__destruct()` is the destructor method which gets called when all object references are removed. For the given example that's:  
+  `$obj1 = null` or `unset($obj1)` or `$obj1` goes out of scope.
 - Within a class `$this` refers to the current object.
 - Properties are defined by using at least one modifier, that's the visibility or the `static` keyword.
 - The visibility is set for properties and methods, the default is `public` which means accessible from everywhere.
