@@ -342,7 +342,7 @@ echo "\033[31mRED\033[0m\n";
 
 **Single-quoted** strings are almost not interpreted, except for `'\\'` and `'\''`. **Double-quoted** strings support escape sequences like `"\n"` and many more, and variables are evaluated. 
 
-In double-quotes, delimit a variable name or use an associative array with **curly braces**:
+In double-quotes, the **curly braces** syntax permits delimiting a variable name and allows the interpolation of associative array elements or object properties/methods. Important is that after the opening `{`, a `$` follows directly:
 
 ```php
 $foobar = 'foobar';
