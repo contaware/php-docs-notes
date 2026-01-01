@@ -1417,6 +1417,14 @@ $comment = htmlspecialchars($comment, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 echo "<p>$comment</p>\n";
 ```
 
+Handy function to insert a `<br>` before each newline:
+
+```php
+echo nl2br("Hi\r\nHTML document.\n", false);
+```
+- For the `\r\n` pair, only a single `<br>` is inserted.
+- The newlines are not removed from the returned string.
+
 ### JSON
 
 ```php
