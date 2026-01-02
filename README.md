@@ -1247,7 +1247,7 @@ usleep(1500000);
 // microtime(true) returns sec 
 // since the Unix epoch as float
 $start_time = microtime(true);
-// some code...
+// some code
 $end_time = microtime(true);
 printf("Execution Time: %f sec\n", 
     $end_time - $start_time);
