@@ -100,6 +100,11 @@ This document is a reference guide for PHP programming. It is a bit more than a 
     - [Data preparation](#data-preparation)
   - [JSON](#json)
   - [CSV](#csv)
+  - [Database](#database)
+    - [Connect](#connect)
+    - [Exec](#exec)
+    - [Query](#query)
+    - [Prepared statements](#prepared-statements)
   - [I/O and Processes](#io-and-processes)
     - [Binary and text mode](#binary-and-text-mode)
     - [Read file](#read-file)
@@ -1476,6 +1481,133 @@ fclose($out);
 fclose($in);
 ```
 - To be CSV compliant we use the empty string `""` as **escape** character. In future PHP releases that parameter will change its default to the empty string or removed altogether.
+
+### Database
+
+PDO (PHP Data Objects) provides a consistent interface for a wide variety of database types.
+
+#### Connect
+
+```php
+try
+{
+    // Create connection
+    $conn = new PDO($dsn, $user, $pass);
+
+    // Print server version
+    echo "Server version: {$conn->getAttribute(PDO::ATTR_SERVER_VERSION)}<br>\n";
+
+    // Close connection
+    $conn = null;
+}
+catch (Throwable $e)
+{
+    echo "PDO failed: {$e->getMessage()}<br>\n";
+}
+```
+- For **MySQL** use `$dsn = "mysql:host=localhost:3306;dbname=db_name;charset=utf8mb4"`
+- For **MSSQL** use `$dsn = "sqlsrv:Server=localhost,1433;Database=db_name;TrustServerCertificate=true"`
+- For **SQLite** use `$dsn = "sqlite:/path/to/database.db"` with no credentials.
+
+#### Exec
+
+Execute the given SQL query returning the number of affected rows:
+
+```php
+$conn->exec("DROP TABLE IF EXISTS tbl");
+$sql = "CREATE TABLE tbl (
+        id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255),
+        num INT,
+        flt FLOAT,
+        active BOOLEAN
+)";
+$conn->exec($sql);
+
+$sql = "INSERT INTO tbl (name, num, flt, active) 
+        VALUES ('val1', 1, 3.1415, TRUE), 
+               ('val2', 2, 1.5, FALSE)";
+$count = $conn->exec($sql);
+var_dump($count);
+
+$sql = "UPDATE tbl SET num = 10 
+        WHERE num = 1";
+$count = $conn->exec($sql);
+var_dump($count);
+
+$sql = "DELETE FROM tbl 
+        WHERE id = 2";
+$count = $conn->exec($sql);
+var_dump($count);
+```
+
+#### Query
+
+Execute the given SQL query, the returned `PDOStatement` object is used to loop over the result set:
+
+```php
+$res = $conn->query("SELECT * FROM tbl");
+
+// Get the number of columns in the result set
+$colcount = $res->columnCount();
+var_dump($colcount);
+
+// Fetch the next row
+while (($data = $res->fetch(PDO::FETCH_ASSOC)) !== false)
+    var_dump($data);
+
+// Return a single column from the next row
+// - Pass the 0-indexed number of the column
+// - Should not be used to retrieve boolean columns
+while (($data = $res->fetchColumn(1)) !== false)
+    var_dump($data);
+
+// Fetch array of array
+$data = $res->fetchAll(PDO::FETCH_ASSOC);
+var_dump($data);
+
+// Count the number of rows in a table
+$count = $conn->query("SELECT count(*) FROM tbl")->fetchColumn();
+var_dump($count);
+```
+- Attention: if you do not fetch all the data from the result set, call `PDOStatement::closeCursor()` to release the database resources.
+- Warning: for most databases, `PDOStatement::rowCount()` does not return the number of rows affected by a `SELECT` statement.
+
+#### Prepared statements
+
+To automatically escape your data, instead of using `query()`, call `prepare()` and then `execute()`:
+
+```php
+$sql = "SELECT * FROM tbl 
+        WHERE id < ? OR name = ? 
+        LIMIT ?";
+$res = $conn->prepare($sql);
+$res->bindValue(1, 5, PDO::PARAM_INT);
+$res->bindValue(2, 'val2');
+$res->bindValue(3, 2, PDO::PARAM_INT);
+$res->execute();
+var_dump($res->fetchAll(PDO::FETCH_ASSOC));
+
+$sql = "INSERT INTO tbl (name, num, flt, active)
+        VALUES (?, ?, ?, ?)";
+$res = $conn->prepare($sql);
+$res->bindValue(1, null, PDO::PARAM_NULL);
+$res->bindValue(2, 12, PDO::PARAM_INT);
+$res->bindValue(3, 3.1415);
+$res->bindValue(4, false, PDO::PARAM_BOOL);
+$res->execute();
+```
+- The first parameter of `bindValue()` is the 1-indexed position of the `?` placeholder.
+- The `PDO::PARAM_STR` data type is the default.
+- The `PDO::PARAM_FLOAT` [does not exist yet](https://wiki.php.net/rfc/pdo_float_type), `PDO::PARAM_STR` is used.
+
+In order to debug the sent SQL query during development, the following code can be placed after `execute()`:
+
+```php
+echo "<pre>";
+$res->debugDumpParams();
+echo "</pre>";
+```
 
 ### I/O and Processes
 
