@@ -1326,6 +1326,8 @@ var_dump($now_approx->diff($now)); // diff in $f
 
 ### Hash
 
+Secure functions for hashing passwords:
+
 ```php
 $pw = '1234';
 $hash = password_hash($pw, PASSWORD_DEFAULT);
@@ -1339,6 +1341,17 @@ var_dump(password_verify($pw, $hash));
 - The used algorithm, cost and salt are returned as part of the hash. This allows `password_verify()` to automatically choose the correct algorithm.
 - Right now `PASSWORD_DEFAULT` uses the bcrypt algorithm which truncates passwords longer than 72 bytes and generates a 60 bytes long hash.
 - Stronger algorithms will become available over time, so storing the hash in a database column that can expand to 255 bytes is a good choice.
+
+Common hash functions:
+
+```php
+// MD5 as lowercase hex num
+$data = 'Hello, World!';
+var_dump(md5($data));
+
+// SHA-256 as lowercase hex num
+var_dump(hash('sha256', $data));
+```
 
 ### Web
 
