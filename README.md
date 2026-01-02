@@ -243,6 +243,8 @@ PHP supports an error control operator. When prepending `@` to an expression, an
 
 Variables are prefixed by a `$`, both when assigned and used. Constants are declared at compile time with `const NAME = value` or at run time through `define('NAME', value)`.
 
+Variable names and constant identifiers are composed of alphanumeric characters or underscores and are not permitted to commence with a number. By convention, constant identifiers are written in all uppercase with underscore separators.
+
 A variable is global if it is used at the top level (outside any function definition) or if it is declared inside a function with the `global` keyword. A function must use the `global` keyword to access a global variable.
 
 ### Data types
