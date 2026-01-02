@@ -129,7 +129,7 @@ PHP can be run through a web server or from the command line. To run it through 
 To install on Debian/Ubuntu:
 
 ```
-sudo apt install php-cli php-mbstring
+sudo apt install php-cli php-mysql php-sqlite3 php-mbstring
 ```
 
 ### macOS
@@ -146,6 +146,10 @@ For Windows [download](https://windows.php.net/download/) the Non-Thread-Safe (N
 
 ```ini
 extension=openssl
+extension=mysqli
+extension=pdo_mysql
+extension=sqlite3
+extension=pdo_sqlite
 extension = mbstring
 default_charset = "UTF-8"
 ```
