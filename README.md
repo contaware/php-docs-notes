@@ -1345,11 +1345,11 @@ var_dump(password_verify($pw, $hash));
 Common hash functions:
 
 ```php
-// MD5 as lowercase hex num
+// MD5 as lowercase hex string
 $data = 'Hello, World!';
 var_dump(md5($data));
 
-// SHA-256 as lowercase hex num
+// SHA-256 as lowercase hex string
 var_dump(hash('sha256', $data));
 ```
 
