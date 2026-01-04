@@ -353,7 +353,18 @@ echo "\033[31mRED\033[0m\n";
 
 ### Single vs Double quotes
 
-**Single-quoted** strings are almost not interpreted, except for `'\\'` and `'\''`. **Double-quoted** strings support escape sequences like `"\n"` and many more, and variables are evaluated. 
+**Single-quoted** strings are almost not interpreted, except for `'\\'` and `'\''`.
+
+**Double-quoted** strings support escape sequences and variables are evaluated:
+
+```php
+echo "backslash: \\\n";
+echo "double-quote: \"\n";
+echo "dollar: \$\n";
+echo "hex: \x24\x0A";
+$var = "It's nice!";
+echo "$var\n";
+```
 
 In double-quotes, the **curly braces** syntax permits delimiting a variable name and allows the interpolation of associative array elements or object properties/methods. Important is that after the opening `{`, a `$` follows directly:
 
