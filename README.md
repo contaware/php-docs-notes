@@ -254,7 +254,9 @@ Variables are prefixed by a `$`, both when assigned and used. Constants are decl
 
 Variable names and constant identifiers are composed of alphanumeric characters or underscores and are not permitted to commence with a number. By convention, constant identifiers are written in all uppercase with underscore separators.
 
-A variable is global if it is used at the top level (outside any function definition) or if it is declared inside a function with the `global` keyword. A function must use the `global` keyword to access a global variable.
+A **variable is global** if it is used at the top level (outside any function definition) or if it is declared inside a function with the `global` keyword.
+
+PHP has [predefined superglobal variables](#superglobals) which are available in all scopes, no need to use the `global` keyword to access them within a function.
 
 ### Data types
 
