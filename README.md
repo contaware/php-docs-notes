@@ -457,7 +457,7 @@ $s = substr($s, $offset);
 // with a max of $len bytes
 $s = substr($s, $offset, $len);
 ```
-- A negative `$offset` starts at offset bytes from the end of the string.
+- A negative `$offset` gets the string at offset bytes from the end.
 
 ### Search
 
@@ -467,8 +467,8 @@ Return byte position of first substring occurrence:
 $pos = strpos($s, $substr, $offset = 0);
 $pos = stripos($s, $substr, $offset = 0);
 ```
-- A zero or positive `$offset` starts the search at offset bytes from the start of the string.
-- A negative `$offset` starts the search at offset bytes from the end of the string.
+- A zero or positive `$offset` begins the search at offset bytes from the start.
+- A negative `$offset` begins the search at offset bytes from the end.
 
 Return byte position of last substring occurrence:
 
@@ -476,10 +476,10 @@ Return byte position of last substring occurrence:
 $pos = strrpos($s, $substr, $offset = 0);
 $pos = strripos($s, $substr, $offset = 0);
 ```
-- A zero or positive `$offset` starts the search from the end of the string up to offset bytes from the start.
-- A negative `$offset` starts the search at offset bytes from the end of the string up to the start.
+- A zero or positive `$offset` begins the search from the end and searches up to offset bytes from the start.
+- A negative `$offset` begins the search at offset bytes from the end and searches up to the start.
 
-Return string starting from first $substr occurrence till the end:
+Return string starting from the first $substr occurrence till the end:
 
 ```php
 $s = strstr($s, $substr);
@@ -500,10 +500,10 @@ Warning: these functions may find a substring and return a position of `0` or an
 ### Replace all
 
 ```php
-// Case-sensitive search
+// Replace with case-sensitive search
 $s = str_replace($search, $repl, $s);
 
-// Case-insensitive search
+// Replace with case-insensitive search
 $s = str_ireplace($search, $repl, $s);
 
 // Replace each byte in $from
