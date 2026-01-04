@@ -31,6 +31,9 @@ This document is a reference guide for PHP programming. It is a bit more than a 
   - [Format string](#format-string)
   - [Positive and negative indexes](#positive-and-negative-indexes)
   - [Common functions](#common-functions)
+  - [Return part of a string](#return-part-of-a-string)
+  - [Search](#search)
+  - [Replace all](#replace-all)
   - [UTF-8](#utf-8)
   - [Regular expression](#regular-expression)
 - [Arrays](#arrays)
@@ -422,16 +425,12 @@ echo $s[-2], "\n"; // second from right
 $s = strtoupper($s);
 $s = strtolower($s);
 $len = strlen($s); // always counts bytes
-$s = trim($s);  // trim whitespaces
-$s = ltrim($s); // trim left whitespaces
-$s = rtrim($s); // trim right whitespaces
-$pos = strpos($s, $substr);  // false if not found
-$pos = strrpos($s, $substr); // false if not found
-$s = substr($s, $start, $len);
-$arr = str_split($s);
-$arr = explode($sep, $s);    // $sep is a string
-$s = implode($sep, $arr);    // $sep is a string
-$s = str_replace($search, $repl, $s); // replace all
+$s = trim($s);     // trim whitespaces
+$s = ltrim($s);    // trim left whitespaces
+$s = rtrim($s);    // trim right whitespaces
+$arr = str_split($s); // one byte per element
+$arr = explode($sep, $s); // $sep is a string
+$s = implode($sep, $arr); // $sep is a string
 ```
 
 Loop over an ASCII string:
@@ -445,6 +444,71 @@ for ($i = 0; $i < strlen($s); $i++) {
     else
         echo "$s[$i] (0x" . dechex($code) . ")\n";
 }
+```
+
+### Return part of a string
+
+```php
+// Return string from offset
+// till the end of the string
+$s = substr($s, $offset);
+
+// Return string from offset 
+// with a max of $len bytes
+$s = substr($s, $offset, $len);
+```
+- A negative `$offset` starts at offset bytes from the end of the string.
+
+### Search
+
+Return byte position of first substring occurrence:
+
+```php
+$pos = strpos($s, $substr, $offset = 0);
+$pos = stripos($s, $substr, $offset = 0);
+```
+- A zero or positive `$offset` starts the search at offset bytes from the start of the string.
+- A negative `$offset` starts the search at offset bytes from the end of the string.
+
+Return byte position of last substring occurrence:
+
+```php
+$pos = strrpos($s, $substr, $offset = 0);
+$pos = strripos($s, $substr, $offset = 0);
+```
+- A zero or positive `$offset` starts the search from the end of the string up to offset bytes from the start.
+- A negative `$offset` starts the search at offset bytes from the end of the string up to the start.
+
+Return string starting from first $substr occurrence till the end:
+
+```php
+$s = strstr($s, $substr);
+$s = stristr($s, $substr);
+```
+
+Return string which comes before the first occurrence of $substr:
+
+```php
+$s = strstr($s, $substr, true);
+$s = stristr($s, $substr, true);
+```
+ 
+Note: the functions with a **i** are case-insensitive. 
+
+Warning: these functions may find a substring and return a position of `0` or an empty string. If no substring is found, all return `false`. To distinguish between those conditions, perform a [strict comparison](#loose-and-strict-comparison).
+
+### Replace all
+
+```php
+// Case-sensitive search
+$s = str_replace($search, $repl, $s);
+
+// Case-insensitive search
+$s = str_ireplace($search, $repl, $s);
+
+// Replace each byte in $from
+// to corresponding byte in $to
+$s = strtr($s, $from, $to);
 ```
 
 ### UTF-8
