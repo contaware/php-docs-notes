@@ -29,6 +29,7 @@ This document is a reference guide for PHP programming. It is a bit more than a 
   - [Single vs Double quotes](#single-vs-double-quotes)
   - [Multi-line strings](#multi-line-strings)
   - [Format string](#format-string)
+  - [Positive and negative indexes](#positive-and-negative-indexes)
   - [Common functions](#common-functions)
   - [UTF-8](#utf-8)
   - [Regular expression](#regular-expression)
@@ -393,11 +394,26 @@ echo $multiline2 . "\n";
 ### Format string
 
 ```php
-$num = 3;
-$location = 'tree';
-$format = "There are %d monkeys in the %s\n";
-printf($format, $num, $location);
-echo sprintf($format, $num, $location);
+$d = 10;
+$x = 0x0A;
+$b = 0b1010;
+$f = 3.1415;
+$s = "Hi!";
+$fmt = "%%d=%d %%x=%02x %%b=%b %%f=%0.3f %%s=%s\n";
+printf($fmt, $d, $x, $b, $f, $s);
+echo sprintf($fmt, $d, $x, $b, $f, $s);
+```
+
+### Positive and negative indexes
+
+Positive indexes are zero-based, while negative indexes are one-based:
+
+```php
+$s = "Hi!";
+echo $s[0], "\n";  // first from left
+echo $s[1], "\n";  // second from left
+echo $s[-1], "\n"; // first from right
+echo $s[-2], "\n"; // second from right
 ```
 
 ### Common functions
