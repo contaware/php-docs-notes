@@ -726,6 +726,7 @@ $arr = [...$a, ...$b]; // spread operator
 $arr = [...$a, 5, ...$b];
 $arr = ['key' => 'val', ...$a, ...$b];
 ```
+- Note: `array_merge()` supports also more than two arrays.
 
 ### Destructure (or unpack)
 
