@@ -640,12 +640,12 @@ print_r($arr); // [3, 2]
 
 ```php
 $c = count($arr);
-$val = array_first($arr); // null if empty
-$val = array_last($arr);  // null if empty
 $key = array_key_first($arr); // null if empty
 $key = array_key_last($arr);  // null if empty
-$vals = array_values($arr); // re-index
+$val = array_first($arr); // null if empty
+$val = array_last($arr);  // null if empty
 $keys = array_keys($arr);
+$vals = array_values($arr); // re-index
 $arr = array_combine($keys, $vals);
 $arr = array_unique($arr);  // remove duplicates
 ```
