@@ -707,8 +707,10 @@ krsort($arr); // reverse ksort()
 ### Slice
 
 ```php
-// $preserve_keys defaults to false, that will reorder 
-// and reset integer keys (not string keys)
+// - $len defaults to null, that will return from 
+//   offset to the end of the array.
+// - $preserve_keys defaults to false, that will reorder 
+//   and reset integer keys (not string keys).
 $arr = array_slice($arr, $offset, $len, $preserve_keys);
 ```
 
