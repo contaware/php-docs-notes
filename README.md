@@ -146,7 +146,7 @@ brew install php
 
 ### Windows
 
-For Windows [download](https://windows.php.net/download/) the Non-Thread-Safe (NTS) package and unzip it to like `C:\php`. Now add the chosen folder to your `PATH`. Copy `php.ini-development` to `php.ini` and verify that:
+For Windows [download](https://windows.php.net/download/) the Non-Thread-Safe (NTS) package and unzip it to like `C:\php`. Now add the chosen folder to your `PATH`. Copy `php.ini-development` to `php.ini` and make sure that:
 
 ```ini
 extension=openssl
@@ -154,7 +154,7 @@ extension=mysqli
 extension=pdo_mysql
 extension=sqlite3
 extension=pdo_sqlite
-extension = mbstring
+extension=mbstring
 default_charset = "UTF-8"
 ```
 
