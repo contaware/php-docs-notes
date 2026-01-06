@@ -640,11 +640,17 @@ print_r($arr); // [3, 2]
 
 ```php
 $c = count($arr);
+$val = array_first($arr); // null if empty
+$val = array_last($arr);  // null if empty
+$key = array_key_first($arr); // null if empty
+$key = array_key_last($arr);  // null if empty
 $vals = array_values($arr); // re-index
 $keys = array_keys($arr);
 $arr = array_combine($keys, $vals);
 $arr = array_unique($arr);  // remove duplicates
 ```
+
+The `key()`, `current()`, `next()`, `prev()`, `reset()` and `end()` functions manipulate the *internal array pointer* and could be deprecated in future. If [foreach](#foreach) is not enough for your array walking needs, consider using the [ArrayIterator](https://www.php.net/manual/class.arrayiterator.php) class.
 
 ### Add element
 
