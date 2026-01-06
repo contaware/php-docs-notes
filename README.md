@@ -29,7 +29,7 @@ This document is a reference guide for PHP programming. It is a bit more than a 
   - [Single vs Double quotes](#single-vs-double-quotes)
   - [Multi-line strings](#multi-line-strings)
   - [Format string](#format-string)
-  - [Positive and negative indexes](#positive-and-negative-indexes)
+  - [Positive and negative indices](#positive-and-negative-indices)
   - [Common functions](#common-functions)
   - [Return part of a string](#return-part-of-a-string)
   - [Search](#search)
@@ -407,9 +407,9 @@ printf($fmt, $d, $x, $b, $f, $s);
 echo sprintf($fmt, $d, $x, $b, $f, $s);
 ```
 
-### Positive and negative indexes
+### Positive and negative indices
 
-Positive indexes are zero-based, while negative indexes are one-based:
+Positive indices are 0-based, while negative indices are 1-based:
 
 ```php
 $s = "Hi!";
