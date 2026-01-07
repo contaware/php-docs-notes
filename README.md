@@ -132,7 +132,7 @@ PHP can be run through a web server or from the command line. To run it through 
 
 To install on Debian/Ubuntu:
 
-```
+```bash
 sudo apt install php-cli php-mysql php-sqlite3 php-mbstring
 ```
 
@@ -140,7 +140,7 @@ sudo apt install php-cli php-mysql php-sqlite3 php-mbstring
 
 To install using [Homebrew](https://brew.sh/):
 
-```
+```bash
 brew install php
 ```
 
