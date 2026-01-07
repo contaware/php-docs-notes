@@ -497,6 +497,33 @@ Note: the functions with a **i** are case-insensitive.
 
 Warning: these functions may find a substring and return a position of `0` or an empty string. If no substring is found, all return `false`. To distinguish between those conditions, perform a [strict comparison](#loose-and-strict-comparison).
 
+Here is an example to help you understand the more challenging logic of negative offsets:
+
+```php
+// Positive 0-based offsets
+//    0123456789
+//    ||||||||||
+$s = "0xy3xy6xy9";
+//    ||||||||||
+//  -10987654321
+// Negative 1-based offsets
+
+// strpos does a "offset -> end" search
+// with positive or negative offsets
+echo strpos($s, 'xy', 4) . "\n";   // 4
+echo strpos($s, 'xy', -6) . "\n";  // 4
+
+// strrpos with positive offsets does
+// a "end -> offset" search
+echo strrpos($s, 'xy', 4) . "\n";  // 7
+
+// strrpos with negative offsets does
+// a "offset -> start" search
+echo strrpos($s, 'xy', -5) . "\n"; // 4
+echo strrpos($s, 'xy', -6) . "\n"; // 4
+echo strrpos($s, 'xy', -7) . "\n"; // 1
+```
+
 ### Replace all
 
 ```php
