@@ -88,9 +88,17 @@ This document is a reference guide for PHP programming. It is a bit more than a 
     - [1. Compare `__FILE__` with `$_SERVER['SCRIPT_FILENAME']`](#1-compare-__file__-with-_serverscript_filename)
     - [2. Test a constant defined in the main script](#2-test-a-constant-defined-in-the-main-script)
 - [Packages](#packages)
-  - [Use](#use)
-  - [Manage](#manage)
-  - [Examples of packages](#examples-of-packages)
+  - [Install Composer](#install-composer)
+    - [Linux](#linux-1)
+    - [macOS](#macos-1)
+    - [Windows](#windows-1)
+    - [Self-update](#self-update)
+  - [Use Composer](#use-composer)
+    - [Add packages](#add-packages)
+    - [Update packages](#update-packages)
+    - [Remove packages](#remove-packages)
+    - [Search packages](#search-packages)
+    - [Advanced use](#advanced-use)
 - [Built-in tools](#built-in-tools)
   - [Math](#math)
   - [Random](#random)
@@ -1292,15 +1300,96 @@ if (!defined('FLAG_FROM_PARENT'))
 
 ## Packages
 
-### Use
+[Composer](https://getcomposer.org/) is a per-project dependency manager for PHP, it does not install anything globally. It allows you to declare the libraries your project depends on and it will manage (install/update) them for you.
 
-Packages are installed via **Composer**.
+### Install Composer
 
+#### Linux
 
-### Manage
+Download the [composer installer](https://getcomposer.org/installer) file, rename it to `composer-setup.php` and install with:
 
+```bash
+sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+```
 
-### Examples of packages
+#### macOS
+
+To install using [Homebrew](https://brew.sh/):
+
+```bash
+brew install composer
+```
+
+#### Windows
+
+Download and run [Composer-Setup.exe](https://getcomposer.org/Composer-Setup.exe). Select the option *"Install for all users (recommended)"* and do not check *"Developer mode"*. The installer will add `C:\ProgramData\ComposerSetup\bin` to your `PATH`.
+
+#### Self-update
+
+You can update composer with (for Linux prepend with `sudo`):
+
+```bash
+composer self-update
+```
+
+### Use Composer
+
+Always enter your project directory before issuing any Composer command.
+
+The `composer.json` file lists the packages and `composer.lock` lists the currently installed versions of the packages. The actual packages are stored under the `vendor` directory.
+
+Composer can autoload all include files, no need to call `require()` or `include()`, just add the following line at the top of your scripts:
+
+```php
+require __DIR__ . '/vendor/autoload.php'
+```
+
+#### Add packages
+
+```bash
+# Add with version
+composer require "vendor/package:version"
+
+# Add listed ones
+composer require vendor/package vendor2/package2
+```
+- Note: this command will update/create `composer.json`, install packages to `vendor` and update/create `composer.lock`.
+- The optional `version` can be the exact version like `1.5.0`, a version range `1.5 - 2.0` or it can contain a wildcard like `1.2.*` or `1.*`. The `^` operator is recommended as it will only allow non-breaking updates, for example `^1.2.3`.
+
+#### Update packages
+
+```bash
+# Update all
+composer update
+
+# Updated listed ones
+composer update vendor/package vendor2/package2
+```
+- Note: this command will read `composer.json`, install new packages to `vendor` and update `composer.lock`.
+- Hint: call `composer outdated` to list the available updates.
+
+#### Remove packages
+
+```bash
+composer remove vendor/package vendor2/package2
+```
+- Hint: call `composer show` to list the installed packages.
+
+#### Search packages
+
+Use [Packagist](https://packagist.org/) to search packages or issue:
+
+```bash
+composer search search_term
+```
+
+Check available versions:
+
+```bash
+composer show vendor/package --all
+```
+
+Here a selection of common packages:
 
 - App frameworks: `nativephp/electron`
 - Web frameworks: `laravel/framework`
@@ -1311,6 +1400,11 @@ Packages are installed via **Composer**.
 - Network: `guzzlehttp/guzzle` `phpmailer/phpmailer`
 - Math: `markrogoyski/math-php`
 
+#### Advanced use
+
+In addition to your script files, also `composer.json` and `composer.lock` should be in your version control system, while the `vendor` directory is excluded.
+
+After cloning a project, call `composer install` which reads the `composer.lock` file and installs the exact versions of the packages listed there. Avoid calling `composer update` because you risk breaking the project with new packages.
 
 ## Built-in tools
 
