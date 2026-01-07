@@ -1,4 +1,4 @@
-FROM php:8.4-apache
+FROM php:8.5-apache
 
 # Set the php extensions you need for your project
 RUN apt update && \
