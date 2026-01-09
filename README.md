@@ -1487,6 +1487,8 @@ For the following examples, `...` means that multiple comma-separated numbers or
 
 ```php
 $num = abs($num);
+$flt = floor($num);
+$flt = ceil($num);
 $flt = round($num);
 $num = min(...);
 $num = max(...);
