@@ -248,11 +248,9 @@ php -S localhost:8888 -t ./html
 
 PHP is **case-sensitive**. A PHP block starts at `<?php` and ends with `?>` or at the end of the file. Comments start at `#` or `//` and end with the line or with the current block of PHP code, whichever comes first. Multi-line comments start with `/*` and end at the first `*/` encountered. 
 
-PHP programmers use both **snake_case** and **camelCase**; class names should be written in **PascalCase**.
+PHP uses **curly braces** `{}` to structure code and statements are terminated by a **semicolon**.
 
-Statements are terminated by a **semicolon**.
-
-Most PHP style guides recommend **indenting** by **four spaces** rather than using a tab.
+PHP programmers use both **snake_case** and **camelCase**; class names should be written in **PascalCase**. Most PHP style guides recommend **indenting** by **four spaces** rather than using a tab.
 
 PHP uses **zero based indexing**.
 
