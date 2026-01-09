@@ -87,6 +87,7 @@ This document is a reference guide for PHP programming. It is a bit more than a 
   - [Direct run check](#direct-run-check)
     - [1. Compare `__FILE__` with `$_SERVER['SCRIPT_FILENAME']`](#1-compare-__file__-with-_serverscript_filename)
     - [2. Test a constant defined in the main script](#2-test-a-constant-defined-in-the-main-script)
+- [Namespaces](#namespaces)
 - [Packages](#packages)
   - [Install Composer](#install-composer)
     - [Linux](#linux-1)
@@ -1295,6 +1296,78 @@ include 'included.php';
 /* included.php */
 if (!defined('FLAG_FROM_PARENT'))
     die('No direct run allowed.');
+```
+
+
+## Namespaces
+
+To avoid naming conflicts, a namespace allows **encapsulating classes, functions and constants**. A namespace must be **declared at the top of a file** (except for the `declare` keyword which comes before the `namespace` keyword). A **backslash** is used to separate namespace **hierarchy levels**. Without any namespace definition, the namespace defaults to the global space.
+
+The `use` keyword permits referring to a fully qualified name with an **alias**.
+
+Namespace declarations and the `use` keyword only **apply to their own file**, no effects from or into included files. The same namespace may be declared in multiple files, allowing splitting a namespace's content.
+
+Here a file that will be included, usually a library file:
+
+```php
+// No leading backslash for the name
+// (by definition it is fully qualified)
+namespace NameA\NameB;
+
+class MyClass {
+    function __construct() {echo "MyClass()\n";}
+}
+function myFunc() {echo "myFunc()\n";}
+const MYCONST = "Const value";
+```
+
+Here a file that includes the above file:
+
+```php
+namespace NameA;
+require "lib.php"; // the above file
+
+// Fully qualified names start with a backslash
+$c = new \NameA\NameB\MyClass();
+\NameA\NameB\myFunc();
+echo \NameA\NameB\MYCONST . "\n";
+
+// Qualified names do not start with a backslash,
+// they are relative to the current namespace
+$c = new NameB\MyClass();
+NameB\myFunc();
+echo NameB\MYCONST . "\n";
+
+// 'use' does not need a backslash in the name
+// (by definition it is fully qualified)
+// Shorthand: 'as' not needed with same name.
+use NameA\NameB\MyClass as MyClass;
+use function NameA\NameB\myFunc as myFuncAlias;
+use const NameA\NameB\MYCONST; // leaving out 'as'
+$c = new MyClass();
+myFuncAlias();
+echo MYCONST . "\n";
+```
+
+If an unqualified name (name without backslashes) is not found in the current namespace, functions and constants fallback to the global namespace, while classes throw an error:
+
+```php
+namespace NameC;
+
+// Functions and Constants
+print_r(explode(':', "Hello:World"));
+echo PHP_VERSION . "\n";
+
+// Classes
+use DateTimeImmutable;
+var_dump(new DateTimeImmutable());
+var_dump(new \DateTime());
+```
+
+The `define()` function is special with regard to namespaces, it defines the given constant in global namespace even if called from within a namespace. To target a specific namespace, provide the fully qualified name, but without a leading backslash:
+
+```php
+define("NameA\\NameB\\MYDEF", "Def value");
 ```
 
 
