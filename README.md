@@ -43,9 +43,9 @@ This document is a reference guide for PHP programming. It is a bit more than a 
   - [Common functions](#common-functions-1)
   - [Add element](#add-element)
   - [Remove element](#remove-element)
-  - [Case-sensitive search](#case-sensitive-search)
-  - [In-place sort](#in-place-sort)
-  - [Slice](#slice)
+  - [Search](#search-1)
+  - [Sort](#sort)
+  - [Slice and Chunk](#slice-and-chunk)
   - [Merge](#merge)
   - [Destructure (or unpack)](#destructure-or-unpack)
 - [Conditions](#conditions)
@@ -719,15 +719,16 @@ $lastval = array_pop($arr);
 $firstval = array_shift($arr);
 ```
 
-### Case-sensitive search
+### Search
 
 ```php
 $b = in_array($val, $arr);
 $key = array_search($val, $arr); // false if not found
 $b = array_key_exists($key, $arr);
 ```
+- Note: all of the above functions are **case-sensitive**.
 
-### In-place sort
+### Sort
 
 ```php
 sort($arr);   // resets keys to 0..count($arr)-1
@@ -737,8 +738,9 @@ arsort($arr); // reverse asort()
 ksort($arr);  // sort by key
 krsort($arr); // reverse ksort()
 ```
+- Note: all of the above functions do an **in-place** sort.
 
-### Slice
+### Slice and Chunk
 
 ```php
 // - $len defaults to null, that will return from 
@@ -746,6 +748,14 @@ krsort($arr); // reverse ksort()
 // - $preserve_keys defaults to false, that will reorder 
 //   and reset integer keys (not string keys).
 $arr = array_slice($arr, $offset, $len, $preserve_keys);
+```
+
+```php
+// - $len is the chunk size, last chunk may be smaller.
+//   To have two chunks: $len = ceil(count($arr) / 2);
+// - $preserve_keys defaults to false, that will convert
+//   all keys to integer keys starting at 0.
+$arrs = array_chunk($arr, $len, $preserve_keys);
 ```
 
 ### Merge
