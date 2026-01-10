@@ -684,11 +684,12 @@ print_r($arr); // [3, 2]
 ### Common functions
 
 ```php
+$arr = range($start, $end, $step = 1);
 $c = count($arr);
 $key = array_key_first($arr); // null if empty
 $key = array_key_last($arr);  // null if empty
-$val = array_first($arr); // null if empty
-$val = array_last($arr);  // null if empty
+$val = array_first($arr);     // null if empty
+$val = array_last($arr);      // null if empty
 $keys = array_keys($arr);
 $vals = array_values($arr); // re-index
 $arr = array_combine($keys, $vals);
@@ -703,6 +704,7 @@ The `key()`, `current()`, `next()`, `prev()`, `reset()` and `end()` functions ma
 // Append
 // Note: keys remain untouched
 $arr[] = $val;
+array_push($arr, $val);
 $arr[$key] = $val;
 
 // Prepend value
