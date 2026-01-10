@@ -359,6 +359,17 @@ echo "Hello" . "World!" . "\n";
 echo "\033[31mRED\033[0m\n";
 ```
 
+The **short echo tag** `<?=` is a shorthand for `<?php echo`:
+
+```php
+<?= $var; ?>
+<?= $var ?>
+<?=$var?>
+<?="Hi!\n"?>
+<?=phpversion(),"\n"?>
+<?=PHP_VERSION."\n"?>
+```
+
 
 ## Strings
 
