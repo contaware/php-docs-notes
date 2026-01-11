@@ -1772,7 +1772,7 @@ echo nl2br("Hi\r\nHTML document.\n", false);
 The [PHP filter_* functions](https://www.php.net/filter) are not necessary, it's clearer and more transparent if you do this:
 
 1. To output **html** use `htmlspecialchars()` like described above.
-2. To validate data, like emails for example, grab a [regex](#regular-expression) from the web.
+2. To validate data, like emails for example, grab a [regex](#regular-expression).
 3. Feed your database with [prepared statements](#prepared-statements).
 
 ### JSON
