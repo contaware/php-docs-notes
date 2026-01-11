@@ -7,8 +7,8 @@
 </head>
 <body>
 <form action="submit.php" method="get">
-    <label>Name:</label><br>
-    <input type="text" name="name"><br>
+    <label for="name">Name</label>
+    <input type="text" name="name" id="name"><br>
     <input type="submit" value="HTTP Get">
 </form>
 </body>
