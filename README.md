@@ -860,11 +860,13 @@ assert(empty('0'));
 ```php
 if (condition1) {
     // condition1 is true
-} elseif (condition2) {
+}
+elseif (condition2) {
     // condition1 is false
     // and
     // condition2 is true
-} else {
+}
+else {
     // both are false
 }
 ```
@@ -917,11 +919,14 @@ When an exception is thrown, code following the statement will not be executed, 
 ```php
 try {
     throw new Error('Bad');
-} catch (Exception $e) {
+}
+catch (Exception $e) {
     echo "$e\n";
-} catch (Error $e) {
+}
+catch (Error $e) {
     echo "$e\n";
-} finally {
+}
+finally {
     echo "Runs always\n";
 }
 ```

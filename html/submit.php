@@ -23,7 +23,8 @@ if (isset($_SERVER['REQUEST_METHOD'])) {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         foreach($_GET as $key=>$val)
             echo htmlspecialchars("$key=$val", ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . "<br>\n";
-    } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    }
+    elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
         foreach($_POST as $key=>$val)
             echo htmlspecialchars("$key=$val", ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . "<br>\n";
     }
