@@ -55,6 +55,7 @@ This document is a reference guide for PHP programming. It is a bit more than a 
   - [empty()](#empty)
   - [if](#if)
   - [Ternary operator](#ternary-operator)
+  - [null coalescing operator](#null-coalescing-operator)
   - [Spaceship operator](#spaceship-operator)
   - [switch-case](#switch-case)
   - [try-except](#try-except)
@@ -877,6 +878,20 @@ If `condition` is `true`, `$res` is `val1`, otherwise it is `val2`:
 
 ```php
 $res = condition ? val1 : val2;
+```
+
+It is possible to leave out the middle part of the ternary operator, so that if `condition` is `true`, `$res` is `condition`, otherwise it is `val2`:
+
+```php
+$res = condition ?: val2;
+```
+
+### null coalescing operator
+
+```php
+$res = $var ?? 'default';
+// is a shorthand for:
+$res = isset($var) ? $var : 'default';
 ```
 
 ### Spaceship operator
