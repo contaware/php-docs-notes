@@ -2085,6 +2085,10 @@ var_dump(filesize($path));
 $ts = filemtime($path); // Unix timestamp
 var_dump(new DateTimeImmutable('@' . $ts));
 
+// Clear cache for the status functions:
+// is_file(), is_dir(), filesize(), ...
+clearstatcache();
+
 // Delete file
 unlink($path);
 
