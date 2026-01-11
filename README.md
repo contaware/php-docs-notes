@@ -1769,6 +1769,12 @@ echo nl2br("Hi\r\nHTML document.\n", false);
 - For the `\r\n` pair, only a single `<br>` is inserted.
 - The newlines are not removed from the returned string.
 
+The [PHP filter_* functions](https://www.php.net/filter) are not necessary, it's clearer and more transparent if you do this:
+
+1. To output **html** use `htmlspecialchars()` like described above.
+2. To validate data, like emails for example, grab a [regex](#regular-expression) from the web.
+3. Feed your database with [prepared statements](#prepared-statements).
+
 ### JSON
 
 ```php
