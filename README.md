@@ -1943,21 +1943,21 @@ To the file modes (`'r'`, `'w'`, `'a'`) we can append a translation mode. If no 
 Classic file open, read and close:
 
 ```php
-$file = fopen('my_file.txt', 'r');
+$handle = fopen('my_file.txt', 'r');
 
 // Read entire file
-$content = fread($file, 
+$content = fread($handle, 
     filesize('my_file.txt'));
 echo $content;
 
 // Move to beginning
-fseek($file, 0);
+fseek($handle, 0);
 
 // Read lines returning also line-ending
-while (($line = fgets($file)) !== false)
+while (($line = fgets($handle)) !== false)
     echo $line;
 
-fclose($file);
+fclose($handle);
 ```
 - `fgets()` works well with unix and windows line-ending in both binary and text mode. 
 
@@ -2006,9 +2006,9 @@ echo file_get_contents($url, false, $ctx);
 The write mode is `'w'`, and the append mode is `'a'`; for both cases the file is created if not existing:
 
 ```php
-$file = fopen('my_file.txt', 'w');
-fwrite($file, "Line1\nLine2\n");
-fclose($file);
+$handle = fopen('my_file.txt', 'w');
+fwrite($handle, "Line1\nLine2\n");
+fclose($handle);
 ```
 
 Helper function:
