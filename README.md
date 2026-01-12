@@ -1859,8 +1859,7 @@ PDO (PHP Data Objects) provides a consistent interface for a wide variety of dat
 #### Connect
 
 ```php
-try
-{
+try {
     // Create connection
     $conn = new PDO($dsn, $user, $pass);
 
@@ -1870,8 +1869,7 @@ try
     // Close connection
     $conn = null;
 }
-catch (Throwable $e)
-{
+catch (Throwable $e) {
     echo "PDO failed: {$e->getMessage()}<br>\n";
 }
 ```
