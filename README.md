@@ -649,11 +649,11 @@ $arr2['key2'] = 'val2';
 Multidimensional arrays are simply arrays which have other arrays as elements.
 
 ```php
-$arr = [
+$arrs = [
     'arr1' => [1, 2, 3],
     'arr2' => [4, 5, 6]
 ];
-echo $arr['arr1'][0];
+echo $arrs['arr1'][0];
 ```
 
 ### References
@@ -1013,19 +1013,19 @@ foreach ($arr as $key => $val) {
 To loop over a multidimensional array it's possible to use [array destructuring](#destructure-or-unpack):
 
 ```php
-$arr = [
+$arrs = [
     [1, 2],
     [3, 4]
 ];
-foreach ($arr as [$a, $b]) {
+foreach ($arrs as [$a, $b]) {
     echo "$a, $b\n";
 }
 
-$arr = [
+$arrs = [
     ['name' => 'Leo', 'id' => 1],
     ['name' => 'Zoe', 'id' => 2]
 ];
-foreach ($arr as ['id' => $id, 'name' => $name]) {
+foreach ($arrs as ['id' => $id, 'name' => $name]) {
     echo "$id, $name\n";
 }
 ```
