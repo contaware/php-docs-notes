@@ -70,6 +70,7 @@ This document is a reference guide for PHP programming. It is a bit more than a 
     - [Multidimensional array](#multidimensional-array)
     - [Update elements](#update-elements)
     - [Object properties](#object-properties)
+- [Alternative syntax for control structures](#alternative-syntax-for-control-structures)
 - [Functions](#functions)
   - [Basic functions](#basic-functions)
   - [Varargs functions](#varargs-functions)
@@ -1064,6 +1065,26 @@ foreach ($obj as $prop => $val) {
 }
 ```
 
+
+## Alternative syntax for control structures
+
+The alternative syntax is often used when printing a substantial quantity of plain HTML. To switch to the alternate syntax, follow these steps:
+
+1. After `if`, `else`, `elseif`, `while`, `for`, `foreach`, `switch` change the opening brace `{` to a colon `:`.
+2. Change the structure ending brace `}` to `endif;`, `endwhile;`, `endfor;`, `endforeach;`, `endswitch;` respectively.
+
+```php
+<?php if ($var == 1): ?>
+    <h1>Title1</h1>
+    <p>Paragraph1</p>
+<?php elseif ($var == 2): ?>
+    <h1>Title2</h1>
+    <p>Paragraph2</p>
+<?php else: ?>
+    <h1>Title3</h1>
+    <p>Paragraph3</p>
+<?php endif; ?>
+```
 
 ## Functions
 
