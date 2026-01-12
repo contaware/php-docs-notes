@@ -1051,6 +1051,23 @@ foreach ($arr as $key => $val) {
 }
 ```
 
+Multidimensional case:
+
+```php
+$arrs = [
+    [1, 2],
+    [3, 4]
+];
+foreach ($arrs as &$arr) {
+    foreach ($arr as &$val) {
+        $val = $val ** 2;
+    }
+}
+// Break references
+unset($val);
+unset($arr);
+```
+
 #### Object properties
 
 ```php
