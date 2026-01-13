@@ -1881,13 +1881,13 @@ try {
     $conn = new PDO($dsn, $user, $pass);
 
     // Print server version
-    echo "Server version: {$conn->getAttribute(PDO::ATTR_SERVER_VERSION)}<br>\n";
+    echo "Server version: {$conn->getAttribute(PDO::ATTR_SERVER_VERSION)}\n";
 
     // Close connection
     $conn = null;
 }
 catch (Throwable $e) {
-    echo "PDO failed: {$e->getMessage()}<br>\n";
+    die("PDO failed: {$e->getMessage()}\n");
 }
 ```
 - For **MySQL** use `$dsn = "mysql:host=localhost:3306;dbname=db_name;charset=utf8mb4"`
