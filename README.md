@@ -1890,7 +1890,7 @@ catch (Throwable $e) {
     die("PDO failed: {$e->getMessage()}\n");
 }
 ```
-- For **MySQL** use `$dsn = "mysql:host=localhost:3306;dbname=db_name;charset=utf8mb4"`
+- For **MySQL** use `$dsn = "mysql:host=localhost;port=3306;dbname=db_name;charset=utf8mb4"`
 - For **MSSQL** use `$dsn = "sqlsrv:Server=localhost,1433;Database=db_name;TrustServerCertificate=true"`
 - For **SQLite** use `$dsn = "sqlite:/path/to/database.db"` with no credentials.
 
