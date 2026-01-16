@@ -110,9 +110,11 @@ This document is a reference guide for PHP programming. It is a bit more than a 
   - [Hash](#hash)
   - [Web](#web)
     - [Superglobals](#superglobals)
+    - [HTML](#html)
     - [URL](#url)
     - [Send HTTP headers](#send-http-headers)
-    - [Data preparation](#data-preparation)
+  - [Data validation](#data-validation)
+  - [Data preparation](#data-preparation)
   - [JSON](#json)
   - [CSV](#csv)
   - [Database](#database)
@@ -1755,6 +1757,34 @@ var_dump(hash('sha256', $data));
 - `$_SERVER['PHP_SELF']` behaves similarly to `$_SERVER['SCRIPT_NAME']`, except that it also returns the trailing PATH_INFO.
 - `$_SERVER` variables that return an absolute path are [covered here](#useful-constants-and-variables).
 
+#### HTML
+
+1. In a tag content (between the opening and the closing tags) we must entity encode `& < >`.
+2. An attribute value can remain unquoted if it doesn't contain ASCII whitespaces or any of ``" ' ` = < >``. Otherwise, it has to be quoted using either single-quotes or double-quotes. The value, along with the `=` character, can be omitted altogether if the value is the empty string. Within a double-quoted attribute value, it's necessary to entity encode `"` and within a single-quoted attribute value, it's necessary to entity encode `'`.
+3. If we entity encode more than necessary, it's not a problem. Thus for tag content and quoted attribute values, we always entity encode `& " ' < >`.
+4. The tag content of `<script>` and `<style>` is an exception: entity encoding is not supported there.
+
+PHP has a function which performs entity encoding; it must be called with the following arguments to be effective:
+
+```php
+$comment = $_POST['comment'];
+$comment = htmlspecialchars($comment, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+echo "<p>$comment</p>\n";
+
+$name = $_POST['name'];
+$name = htmlspecialchars($name, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+echo "<input type=\"text\" value=\"$name\">\n";
+```
+- `htmlspecialchars($s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')` entity encodes `& " ' < >` to `&amp; &quot; &#039; &lt; &gt;`.
+
+Handy function to insert a `<br>` before each newline:
+
+```php
+echo nl2br("Hi\r\nHTML document.\n", false);
+```
+- For the `\r\n` pair, only a single `<br>` is inserted.
+- The newlines are not removed from the returned string.
+
 #### URL
 
 ```php
@@ -1767,8 +1797,14 @@ var_dump(parse_url($url, PHP_URL_PORT));
 // Split query string
 parse_str(parse_url($url, PHP_URL_QUERY), $params);
 print_r($params);
+
+// Prepare a query string
+$foo = 'data +';
+$query = 'foo=' . urlencode($foo);
+echo '<a href="script.php?', $query, '">click</a>', "\n";
 ```
 - `parse_str()` always decodes URL-encoded values.
+- `urlencode()` encodes a string by replacing special characters with their hexadecimal representation preceded by a `%`. This function is used to prepare query string values. Note that the browser performs the same encoding for posted form data when the `enctype` attribute is set to `application/x-www-form-urlencoded`.
 
 #### Send HTTP headers
 
@@ -1793,45 +1829,17 @@ header("Cache-Control: no-store");
 header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
 ```
 
-#### Data preparation
+### Data validation
 
-In HTML, an attribute value can remain unquoted if it doesn't contain ASCII whitespaces or any of ``" ' ` = < >``. Otherwise, it has to be quoted using either single-quotes or double-quotes. The value, along with the `=` character, can be omitted altogether if the value is the empty string. Within a double-quoted attribute value, it's necessary to entity encode `"` (usually to `&quot;`) and within a single-quoted attribute value, it's necessary to entity encode `'` (usually to `&#039;`).
+Data validation is applied to user input data to ensure that it is valid. If it is not valid, it must be discarded. Never make any changes to the data itself, this is the role of [Data preparation](#data-preparation).
 
-PHP has functions performing entity encoding and percent encoding:
+The [PHP filter_* functions](https://www.php.net/filter) can be used to validate data, but also a simple [regex](#regular-expression) can do the job.
 
-- `htmlspecialchars($s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')` entity encodes `& " ' < >` to `&amp; &quot; &#039; &lt; &gt;`.
-- `htmlentities($s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')` entity encodes all applicable characters.
-- `urlencode()` encodes a string by replacing special characters with their hexadecimal representation preceded by a `%`. This function is used to prepare query string values. Note that the browser performs the same encoding for posted form data when the `enctype` attribute is set to `application/x-www-form-urlencoded`.
-- `urldecode()` decodes an URL-encoded string, converting hexadecimal representations of special characters back to their original characters.
+### Data preparation
 
-```php
-$foo = 'data +';
-$query = 'foo=' . urlencode($foo);
-echo '<a href="script.php?', $query, '">click</a>', "\n";
+It's a common misconception that we should filter, sanitize or escape our data right after getting it. The only thing we must do, is to format the data according to the rules of the place we are going to use it. Our output function does not have to trust that it is being given safe data; it simply assumes that everything is unsafe and thus acts accordingly.
 
-$bar = 'other&1';
-$query = 'foo=' . urlencode($foo) . '&bar=' . urlencode($bar);
-$query = htmlspecialchars($query, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-echo '<a href="script.php?', $query, '">click</a>', "\n";
-
-$comment = $_POST['comment'];
-$comment = htmlspecialchars($comment, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-echo "<p>$comment</p>\n";
-```
-
-Handy function to insert a `<br>` before each newline:
-
-```php
-echo nl2br("Hi\r\nHTML document.\n", false);
-```
-- For the `\r\n` pair, only a single `<br>` is inserted.
-- The newlines are not removed from the returned string.
-
-The [PHP filter_* functions](https://www.php.net/filter) are not necessary, it's clearer and more transparent if you do this:
-
-1. To output **html** use `htmlspecialchars()` like described above.
-2. To validate data, like emails for example, grab a [regex](#regular-expression).
-3. Feed your database with [prepared statements](#prepared-statements).
+The [PHP filter_* functions](https://www.php.net/filter) are not necessary, we have specialized output functions for each case: when creating an URL we use `urlencode()`, when rendering data in HTML we employ `htmlspecialchars()`, if we need JSON data we call `json_encode()` and finally to store any data to a database we have the [prepared statements](#prepared-statements) which do all the escapes for us.
 
 ### JSON
 
