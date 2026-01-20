@@ -1549,7 +1549,7 @@ Here a selection of common packages:
 - Web frameworks: `laravel/framework`
 - CLI frameworks: `symfony/console`
 - Text: `michelf/php-markdown` `tecnickcom/tc-lib-pdf`
-- Develop: `phpunit/phpunit` `monolog/monolog` `symfony/dotenv`
+- Develop: `phpunit/phpunit` `monolog/monolog`
 - Multimedia: `intervention/image` `php-ffmpeg/php-ffmpeg`
 - Network: `guzzlehttp/guzzle` `phpmailer/phpmailer`
 - Math: `markrogoyski/math-php`
@@ -2214,13 +2214,35 @@ foreach ($rii as $fi) {
 
 #### Environment variables
 
-`getenv()` returns the value of the given environment variable, or `false` if the environment variable does not exist. If no name is provided, all environment variables are returned as an associative array:
+There are three ways to access the environment variables:
+
+1. `$_SERVER` is always populated with the environment variables, it is thread-safe, but as the array keys are case-sensitive, it is also case-sensitive on Windows where the environment variable are case-insensitive.
+
+2. `getenv()` is not thread-safe, but it is case-insensitive on Windows.
+
+3. `$_ENV` should be avoided because it may not be populated with the environment variables. That's because the `E` in `variables_order` is often missing; find this configuration directive in your `php.ini` file.
 
 ```php
+// Works in all systems,
+// but is NOT thread-safe!
 echo getenv('PATH') . "\n";
-print_r(getenv()); // all
+
+// Linux and macOS
+echo $_SERVER['PATH'] . "\n";
+
+// Windows
+echo $_SERVER['Path'] . "\n";
 ```
-- On Windows `getenv()` is case-insensitive, while on all the other systems it is case-sensitive.
+
+We can load the `.env` file content as environment variables:
+
+```php
+require __DIR__ . '/vendor/autoload.php';
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad(); // no exception if .env missing
+// use your vars through $_SERVER
+```
+- Install with `composer require vlucas/phpdotenv`.
 
 #### Arguments
 
