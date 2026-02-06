@@ -2038,6 +2038,9 @@ Helper functions:
 $content = file_get_contents('my_file.txt');
 echo $content;
 
+// Read entire file and output it directly
+readfile('my_file.txt');
+
 // Read all non-empty lines into an array
 $lines = file('my_file.txt', 
     FILE_IGNORE_NEW_LINES | 
@@ -2045,6 +2048,7 @@ $lines = file('my_file.txt',
 var_dump($lines);
 ```
 - `file_get_contents()` is binary-safe, and it will return `false` on failure.
+- `readfile()` is binary-safe.
 - `file()` works well with unix and windows line-ending.
 
 Wrappers:
