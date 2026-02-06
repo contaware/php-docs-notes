@@ -2048,7 +2048,7 @@ $lines = file('my_file.txt',
 var_dump($lines);
 ```
 - `file_get_contents()` is binary-safe, and it will return `false` on failure.
-- `readfile()` is binary-safe.
+- `readfile()` is binary-safe, and it returns the number of bytes read from the file on success, or `false` on failure. 
 - `file()` works well with unix and windows line-ending.
 
 Wrappers:
