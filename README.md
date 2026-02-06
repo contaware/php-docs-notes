@@ -83,9 +83,10 @@ This document is a reference guide for PHP programming. It is a bit more than a 
   - [Inheritance](#inheritance)
   - [Interfaces](#interfaces)
   - [Copy and Clone](#copy-and-clone)
-- [Include PHP files](#include-php-files)
+- [Include files](#include-files)
   - [include and require](#include-and-require)
   - [Useful constants and variables](#useful-constants-and-variables)
+  - [Include HTML files](#include-html-files)
   - [Direct run check](#direct-run-check)
     - [1. Compare `__FILE__` with `$_SERVER['SCRIPT_FILENAME']`](#1-compare-__file__-with-_serverscript_filename)
     - [2. Test a constant defined in the main script](#2-test-a-constant-defined-in-the-main-script)
@@ -1329,7 +1330,7 @@ class C {
 ```
 
 
-## Include PHP files
+## Include files
 
 ### include and require
 
@@ -1352,6 +1353,20 @@ There are two important distinctions to consider when providing the file:
 - `$_SERVER['DOCUMENT_ROOT']` returns the absolute path to the web server's document root. It can have a trailing slash or not, and it may be empty when accessed from a command line PHP script.
 
 - `$_SERVER['SCRIPT_FILENAME']` returns the absolute path of the currently executing script.
+
+### Include HTML files
+
+When a file is included, parsing drops out of PHP mode and into HTML mode at the beginning of the target file, and resumes again at the end. For this reason it's possible to include .html files like:
+
+```php
+include 'footer.html'; // dangerous!
+```
+
+The above method runs into trouble when the .html file contains a PHP start tag. **It's better to use**:
+
+```php
+readfile('footer.html'); // safe
+```
 
 ### Direct run check
 
