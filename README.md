@@ -1775,7 +1775,7 @@ var_dump(hash('sha256', $data));
 #### HTML
 
 1. In a tag content (between the opening and the closing tags) we must entity encode `& < >`.
-2. An attribute value can remain unquoted if it doesn't contain ASCII whitespaces or any of ``" ' ` = < >``. Otherwise, it has to be quoted using either single-quotes or double-quotes. The value, along with the `=` character, can be omitted altogether if the value is the empty string. Within a double-quoted attribute value, it's necessary to entity encode `"` and within a single-quoted attribute value, it's necessary to entity encode `'`.
+2. An attribute value can remain unquoted if it doesn't contain ASCII whitespaces (SPACE, TAB, LF, FF, CR) or any of ``" ' ` = < >``. Otherwise, it has to be quoted using either single-quotes or double-quotes. An empty attribute must be written like `attr=""` or `attr=''` or just `attr`. Within a double-quoted attribute value, it's necessary to entity encode `"` and within a single-quoted attribute value, it's necessary to entity encode `'`.
 3. If we entity encode more than necessary, it's not a problem. Thus for tag content and quoted attribute values, we always entity encode `& " ' < >`.
 4. The tag content of `<script>` and `<style>` is an exception: entity encoding is not supported there.
 
