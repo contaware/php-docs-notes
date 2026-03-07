@@ -451,6 +451,7 @@ $len = strlen($s); // always counts bytes
 $s = trim($s);     // trim whitespaces
 $s = ltrim($s);    // trim left whitespaces
 $s = rtrim($s);    // trim right whitespaces
+$s = str_repeat("-=", 40);
 $arr = str_split($s); // one byte per element
 $arr = explode($sep, $s); // $sep is a string
 $s = implode($sep, $arr); // $sep is a string
