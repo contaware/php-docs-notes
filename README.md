@@ -1763,7 +1763,7 @@ var_dump(hash('sha256', $data));
 
 - `$_GET` contains query parameters passed in via a **GET request**. The values in `$_GET` are already url-decoded, no need to call `urldecode()`.
 - `$_POST` contains post parameters passed in via a **POST request**. The values in `$_POST` are already decoded according to the Content-Type. The supported Content-Type are: `application/x-www-form-urlencoded` and `multipart/form-data`.
-- `$_SESSION` contains session variables which persist across multiple pages for the duration of the user's session. Call `session_start()` on every page you wish to use `$_SESSION`.
+- `$_SESSION` contains session variables which persist across multiple pages for the duration of the user's session. Call `session_start()` at the top of every page you wish to use `$_SESSION`, and as soon as you have finished using `$_SESSION`, you can release the session lock with `session_write_close()`. You usually do not need to call `session_destroy()` in your code; simply clean-up session variables individually with `unset($_SESSION['var'])` or collectively with `$_SESSION = []`.
 - `$_SERVER['REQUEST_METHOD']` returns the HTTP method as a string: "GET", "POST", "PUT", "DELETE".
 - `$_SERVER['SERVER_PROTOCOL']` returns the protocol name and revision via which the page was requested: "HTTP/1.0", "HTTP/1.1".
 - `$_SERVER['REQUEST_URI']` returns exactly what is entered in the URL (without scheme, host and port). The query values are still url-encoded.
