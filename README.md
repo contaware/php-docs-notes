@@ -1966,8 +1966,11 @@ while (($data = $res->fetch(PDO::FETCH_ASSOC)) !== false)
     var_dump($data);
 
 // Return a single column from the next row
-// - Pass the 0-indexed number of the column
-// - Should not be used to retrieve boolean columns
+// - Pass the 0-indexed number of the column 
+//   (the default is 0)
+// - Do not use to retrieve boolean columns
+// - Remember to use a strict comparison to 
+//   distinguish false from a falsy value
 while (($data = $res->fetchColumn(1)) !== false)
     var_dump($data);
 
