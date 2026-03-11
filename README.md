@@ -1979,10 +1979,10 @@ $data = $res->fetchAll(PDO::FETCH_ASSOC);
 var_dump($data);
 
 // Count the number of rows in a table
-$count = $conn->query("SELECT count(*) FROM tbl")->fetchColumn();
-var_dump($count);
+$rowcount = $conn->query("SELECT count(*) FROM tbl")->fetchColumn();
+var_dump($rowcount);
 ```
-- Attention: if you do not fetch all the data from the result set, call `PDOStatement::closeCursor()` to release the database resources.
+- Attention: if you do not fetch all the data from the result set and wish to execute another SQL statement, call `PDOStatement::closeCursor()` to release the database resources.
 - Warning: for most databases, `PDOStatement::rowCount()` does not return the number of rows affected by a `SELECT` statement.
 
 #### Prepared statements
