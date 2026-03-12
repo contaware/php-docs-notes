@@ -90,6 +90,7 @@ This document is a reference guide for PHP programming. It is a bit more than a 
   - [Direct run check](#direct-run-check)
     - [1. Compare `__FILE__` with `$_SERVER['SCRIPT_FILENAME']`](#1-compare-__file__-with-_serverscript_filename)
     - [2. Test a constant defined in the main script](#2-test-a-constant-defined-in-the-main-script)
+    - [3. Use `get_included_files()`](#3-use-get_included_files)
 - [Namespaces](#namespaces)
 - [Packages](#packages)
   - [Install Composer](#install-composer)
@@ -1371,12 +1372,12 @@ readfile('footer.html'); // safe
 
 ### Direct run check
 
-There are two possibilities to test whether a PHP script is running directly or has been included:
+There are several ways to test whether a PHP script is running directly or has been included:
 
 #### 1. Compare `__FILE__` with `$_SERVER['SCRIPT_FILENAME']`
 
 ```php
-if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME']))
+if (basename(__FILE__) === basename($_SERVER['SCRIPT_FILENAME']))
     echo __FILE__ . " is called directly\n";
 else
     echo __FILE__ . " has been included/required\n";
@@ -1393,6 +1394,17 @@ include 'included.php';
 /* included.php */
 if (!defined('FLAG_FROM_PARENT'))
     die('No direct run allowed.');
+```
+
+#### 3. Use `get_included_files()`
+
+The `get_included_files()` function returns an array containing the full path names of the main file, followed by the included/required files. Files that are included/required multiple times only show up once. When this function is called from an included/required file, the first entry remains the main file.
+
+```php
+if (get_included_files()[0] === __FILE__)
+    echo __FILE__ . " is called directly\n";
+else
+    echo __FILE__ . " has been included/required\n";
 ```
 
 
