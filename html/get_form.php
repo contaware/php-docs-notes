@@ -7,7 +7,7 @@
 </head>
 <body>
 <!-- Note: if the given action url has query parameters, 
-     they are all discarded to accomodate the ones from the form. -->
+     they are all discarded to accommodate the ones from the form. -->
 <form action="submit.php" method="get">
     <label for="name">Name</label>
     <input type="text" name="name" id="name"><br>
