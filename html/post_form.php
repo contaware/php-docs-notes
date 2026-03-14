@@ -6,8 +6,11 @@
     <title>Post Form</title>
 </head>
 <body>
-<!-- Note: if the given action url has query parameters, 
-     they are all handed over. -->
+<!--
+    1. When no action attribute is provided, the current url with all 
+       the query parameters is used.
+    2. If the action url has query parameters, they are all handed over.
+-->
 <form action="submit.php" method="post">
     <label for="name">Name</label>
     <input type="text" name="name" id="name"><br>
