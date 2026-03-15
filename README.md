@@ -1914,7 +1914,9 @@ PDO (PHP Data Objects) provides a consistent interface for a wide variety of dat
 ```php
 try {
     // Create connection
-    $conn = new PDO($dsn, $user, $pass);
+    // Note: as of PHP 8.0.0, PDO::ERRMODE_EXCEPTION is the default mode
+    $conn = new PDO($dsn, $user, $pass, 
+        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
 
     // Print server version
     echo "Server version: {$conn->getAttribute(PDO::ATTR_SERVER_VERSION)}\n";
