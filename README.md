@@ -2017,19 +2017,20 @@ var_dump($res->fetchAll(PDO::FETCH_ASSOC));
 $sql = "INSERT INTO tbl (name, num, flt, active)
         VALUES (:name, :num, :flt, :active)";
 $res = $conn->prepare($sql);
-$res->bindValue(':name', null, PDO::PARAM_NULL);
+$res->bindValue(':name', null);
 $res->bindValue(':num', 12, PDO::PARAM_INT);
 $res->bindValue(':flt', 3.1415);
 $res->bindValue(':active', false, PDO::PARAM_BOOL);
 $res->execute();
 ```
 - The first parameter of `bindValue()` is the 1-indexed position of the `?` placeholder or the named placeholder (colon can be omitted).
-- The `PDO::PARAM_STR` data type is the default.
+- When not providing a `PDO::PARAM_*` datatype, it defaults to `PDO::PARAM_STR`. The datatype is never taken from the datatype of the passed value, even if using `bindParam()` which references a passed variable.
+- A `null` value will be passed to SQL as a `NULL`, `PDO::PARAM_NULL` is not necessary.
 - The `PDO::PARAM_FLOAT` [does not exist yet](https://wiki.php.net/rfc/pdo_float_type), `PDO::PARAM_STR` is used.
-- There is also `bindParam()` which references a variable as the second parameter.
-- Instead of explicitly calling the bind functions, `execute()` can take an array of bind values all treated as `PDO::PARAM_STR`.
 
-In order to debug the sent SQL query during development, the following code can be placed after `execute()`:
+> SQL is usually fine with strings; it will convert them to the column datatype. This means that, most of the time, we can avoid using the bind functions and pass the values to `execute()` as an array (all values will be treated as `PDO::PARAM_STR`). A notable exception that requires `PDO::PARAM_INT` is the `LIMIT` clause, and when using booleans the type must be correct.
+
+In order to debug the sent SQL query, the following code can be placed after `execute()`:
 
 ```php
 echo "<pre>";

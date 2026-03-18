@@ -30,7 +30,7 @@ try {
     $sql = "INSERT INTO tbl (name, num, flt, active)
             VALUES (:name, :num, :flt, :active)";
     $res = $conn->prepare($sql);
-    $res->bindValue(':name', null, PDO::PARAM_NULL);
+    $res->bindValue(':name', null);
     $res->bindValue(':num', 12, PDO::PARAM_INT);
     $res->bindValue(':flt', 3.1415);
     $res->bindValue(':active', false, PDO::PARAM_BOOL);
