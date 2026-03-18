@@ -35,6 +35,9 @@ try {
     $res->bindValue(':flt', 3.1415);
     $res->bindValue(':active', false, PDO::PARAM_BOOL);
     $res->execute();
+    echo "<pre>";
+    $res->debugDumpParams();
+    echo "</pre>";
 
     // Select with prepared statements
     $sql = "SELECT * FROM tbl 
@@ -45,6 +48,9 @@ try {
     $res->bindValue(2, 'val2');
     $res->bindValue(3, 5, PDO::PARAM_INT);
     $res->execute();
+    echo "<pre>";
+    $res->debugDumpParams();
+    echo "</pre>";
     var_dump($res->fetchAll(PDO::FETCH_ASSOC));
 }
 catch (Throwable $e) {
