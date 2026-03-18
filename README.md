@@ -2008,9 +2008,9 @@ $sql = "SELECT * FROM tbl
         WHERE id < ? OR name = ? 
         LIMIT ?";
 $res = $conn->prepare($sql);
-$res->bindValue(1, 5, PDO::PARAM_INT);
+$res->bindValue(1, 4, PDO::PARAM_INT);
 $res->bindValue(2, 'val2');
-$res->bindValue(3, 2, PDO::PARAM_INT);
+$res->bindValue(3, 5, PDO::PARAM_INT);
 $res->execute();
 var_dump($res->fetchAll(PDO::FETCH_ASSOC));
 
