@@ -2015,17 +2015,19 @@ $res->execute();
 var_dump($res->fetchAll(PDO::FETCH_ASSOC));
 
 $sql = "INSERT INTO tbl (name, num, flt, active)
-        VALUES (?, ?, ?, ?)";
+        VALUES (:name, :num, :flt, :active)";
 $res = $conn->prepare($sql);
-$res->bindValue(1, null, PDO::PARAM_NULL);
-$res->bindValue(2, 12, PDO::PARAM_INT);
-$res->bindValue(3, 3.1415);
-$res->bindValue(4, false, PDO::PARAM_BOOL);
+$res->bindValue(':name', null, PDO::PARAM_NULL);
+$res->bindValue(':num', 12, PDO::PARAM_INT);
+$res->bindValue(':flt', 3.1415);
+$res->bindValue(':active', false, PDO::PARAM_BOOL);
 $res->execute();
 ```
-- The first parameter of `bindValue()` is the 1-indexed position of the `?` placeholder.
+- The first parameter of `bindValue()` is the 1-indexed position of the `?` placeholder or the named placeholder (colon can be omitted).
 - The `PDO::PARAM_STR` data type is the default.
 - The `PDO::PARAM_FLOAT` [does not exist yet](https://wiki.php.net/rfc/pdo_float_type), `PDO::PARAM_STR` is used.
+- There is also `bindParam()` which references a variable as the second parameter.
+- Instead of explicitly calling the bind functions, `execute()` can take an array of bind values all treated as `PDO::PARAM_STR`.
 
 In order to debug the sent SQL query during development, the following code can be placed after `execute()`:
 
