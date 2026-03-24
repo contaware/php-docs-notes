@@ -720,6 +720,10 @@ array_unshift($arr, $val);
 
 // Prepend key-value
 $arr = [$key => $val] + $arr;
+
+// Insert at $pos
+// Note: numeric keys are reset to start at 0
+array_splice($arr, $pos, 0, $val);
 ```
 
 ### Remove element
@@ -737,6 +741,10 @@ $lastval = array_pop($arr);
 // Remove first element
 // Note: numeric keys are reset to start at 0
 $firstval = array_shift($arr);
+
+// Remove at $pos
+// Note: numeric keys are reset to start at 0
+array_splice($arr, $pos, 1);
 ```
 
 ### Search
