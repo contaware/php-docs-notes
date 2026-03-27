@@ -471,6 +471,16 @@ for ($i = 0; $i < strlen($s); $i++) {
 }
 ```
 
+Wrap using `$break` at or before the given number of bytes:
+
+```php
+$width = 12;       // default is 75
+$break = "<br>\n"; // default is "\n"
+$cut = false;      // default is false
+echo wordwrap($s, $width, $break, $cut);
+```
+- By setting `$cut` to `true`, words longer than `$width` bytes are broken apart (pay attention because UTF-8 characters can be split).
+
 ### Return part of a string
 
 ```php
