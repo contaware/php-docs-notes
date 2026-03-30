@@ -379,6 +379,8 @@ The **short echo tag** `<?=` is a shorthand for `<?php echo`:
 
 ## Strings
 
+Strings in PHP are assigned and passed by value and are mutable.
+
 ### Single vs Double quotes
 
 **Single-quoted** strings are almost not interpreted, except for `'\\'` and `'\''`.
@@ -630,6 +632,8 @@ $s = preg_replace($pattern, $replacement, $s);
 
 
 ## Arrays
+
+Arrays in PHP are assigned and passed by value and are mutable.
 
 Arrays in PHP are ordered maps, where each value is associated to a unique numeric/string key. Numeric keys must be of type `int` and string keys are of type `string`. Note that string keys having a valid integer representation are converted to numeric keys. When initializing an array with duplicated keys, the later values win.
 
