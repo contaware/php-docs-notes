@@ -1003,7 +1003,7 @@ do {
 } while ($i < 10);
 ```
 
-- Use `break` to break out of the loop and `continue` to jump to the start.
+- Use `break` to break out of the loop and `continue` to jump to the condition.
 
 ### for
 
