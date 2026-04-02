@@ -961,7 +961,7 @@ When an exception is thrown, code following the statement will not be executed, 
 
 ```php
 try {
-    throw new Error('Bad');
+    throw new Error("Bad");
 }
 catch (Exception $e) {
     echo "$e\n";
