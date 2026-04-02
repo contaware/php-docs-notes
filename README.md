@@ -58,7 +58,7 @@ This document is a reference guide for PHP programming. It is a bit more than a 
   - [null coalescing operator](#null-coalescing-operator)
   - [Spaceship operator](#spaceship-operator)
   - [switch-case](#switch-case)
-  - [try-except](#try-except)
+  - [try-catch](#try-catch)
     - [Introduction](#introduction-1)
     - [Purpose of finally](#purpose-of-finally)
 - [Loops](#loops)
@@ -953,7 +953,7 @@ default:
 
 Note: `switch` does a loose comparison (it uses `==`).
 
-### try-except
+### try-catch
 
 #### Introduction
 
