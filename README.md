@@ -2278,25 +2278,13 @@ foreach ($rii as $fi) {
 
 There are three ways to access the environment variables:
 
-1. `$_SERVER` is always populated with the environment variables, it is thread-safe, but as the array keys are case-sensitive, it is also case-sensitive on Windows where the environment variable are case-insensitive.
+1. `$_SERVER` is populated with the environment variables when running from CLI, but when running with Apache, it may be necessary to populate `$_SERVER` through [SetEnv](https://httpd.apache.org/docs/current/mod/mod_env.html#setenv).
 
-2. `getenv()` is not thread-safe, but it is case-insensitive on Windows.
+2. `getenv()` always returns the environment variables and it is case-insensitive on Windows where the environment variable are case-insensitive. The big problem of `getenv()` is that it is **not thread-safe**.
 
-3. `$_ENV` should be avoided because it may not be populated with the environment variables. That's because the `E` in `variables_order` is often missing; find this configuration directive in your `php.ini` file.
+3. `$_ENV` is usually not populated with the environment variables, that's because the `E` in [variables_order](https://www.php.net/manual/ini.core.php#ini.variables-order) is often missing; find this configuration directive in your `php.ini` file.
 
-```php
-// Works in all systems,
-// but is NOT thread-safe!
-echo getenv('PATH') . "\n";
-
-// Linux and macOS
-echo $_SERVER['PATH'] . "\n";
-
-// Windows
-echo $_SERVER['Path'] . "\n";
-```
-
-We can load the `.env` file content as environment variables:
+When developing we can use an `.env` file and load its content to environment variables:
 
 ```php
 require __DIR__ . '/vendor/autoload.php';
