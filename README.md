@@ -2278,7 +2278,7 @@ foreach ($rii as $fi) {
 
 There are three ways to access the environment variables:
 
-1. `$_SERVER` is populated with the environment variables when running from CLI, but when running with Apache, it may be necessary to populate `$_SERVER` through [SetEnv](https://httpd.apache.org/docs/current/mod/mod_env.html#setenv).
+1. `$_SERVER` is populated with the environment variables when running from CLI, but when running with Apache, it may be necessary to populate `$_SERVER` through [SetEnv](https://httpd.apache.org/docs/current/mod/mod_env.html#setenv) or [PassEnv](https://httpd.apache.org/docs/current/mod/mod_env.html#passenv).
 
 2. `getenv()` always returns the environment variables and it is case-insensitive on Windows where the environment variable are case-insensitive. The big problem of `getenv()` is that it is **not thread-safe**.
 
